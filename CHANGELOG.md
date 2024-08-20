@@ -2,7 +2,10 @@
 
 ## v1.0.2
 
-- Version bump to fix package documents after transferring to community repo
+- Now outputs better symbols
+  - Defining Assembly Name for the throwing method
+  - PluginInfo GUID, Name and Version for Assemblies that contain bepinex plugins
+- Update package documents
 
 ## v1.0.1
 
