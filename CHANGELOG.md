@@ -1,5 +1,7 @@
 # UnityDebuggerAssistant Changelog
 
-## Describe your changes for each release here
+## v1.0.1
 
-The contents of this file will display in the Changelog tab on the Thunderstore
+- Initial Release
+- Listens for Harmony or MonoMod Patches
+- Outputs a list of all plugins that modify a specific method when an Exception is thrown targeting that method
