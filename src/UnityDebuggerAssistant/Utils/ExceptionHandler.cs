@@ -1,6 +1,7 @@
 using System;
 using System.Runtime.ExceptionServices;
 using System.Text;
+using BepInEx;
 
 namespace UnityDebuggerAssistant.Utils;
 
@@ -17,7 +18,7 @@ public static class ExceptionHandler
         lastEvent = ex;
 
         //Process the exception here
-        StringBuilder sb = new("\n\n--- Exception Handler ---\n");
+        StringBuilder sb = new("\n\n--- Exception Handler ---\n\n");
 
         sb.Append("Exception Caught: ");
         sb.AppendLine(ex.GetType().ToString());
@@ -25,9 +26,21 @@ public static class ExceptionHandler
         sb.Append("Target Site: ");
         sb.AppendLine(ex.TargetSite.Name);
 
-        //This might be useless info
-        sb.Append("Target Assembly: ");
-        sb.AppendLine(ex.TargetSite.GetType().Assembly.GetName().Name);
+        var declaringAssembly = ex.TargetSite.DeclaringType.Assembly;
+
+        sb.Append("Declaring Assembly: ");
+        sb.AppendLine(declaringAssembly.GetName().Name);
+
+        if (PatchStorage.InfoCache.TryGetValue(declaringAssembly, out PluginInfo info))
+        {
+            sb.AppendLine("Plugin Info");
+            sb.Append("  ");
+            sb.AppendLine(info.Metadata.GUID);
+            sb.Append("  ");
+            sb.Append(info.Metadata.Name);
+            sb.Append("@");
+            sb.AppendLine(info.Metadata.Version.ToString());
+        }
 
         var blames = PatchStorage.GetPatchInformation(ex.TargetSite);
 
