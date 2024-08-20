@@ -1,5 +1,9 @@
 # UnityDebuggerAssistant Changelog
 
+## v1.0.2
+
+- Version bump to fix package documents after transferring to community repo
+
 ## v1.0.1
 
 - Initial Release
