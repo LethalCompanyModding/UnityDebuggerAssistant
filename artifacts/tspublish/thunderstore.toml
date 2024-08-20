@@ -5,7 +5,7 @@
 [package]
   #Edit this in the CSPROJ instead, the workflow will automate copying
   #it here for you
-  description="__PROJECT_DESC__"
+  description="A BepinEx plugin that captures Harmony and Monomod (wip) hook information at runtime to ease debugging"
 
   #Change this to true if your mod has any NSFW content. Please follow the rules
   #on image and text content on your listing or your package may be removed
@@ -13,7 +13,7 @@
 
   #This is the link that shows up in the top right of the package page
   #while it can be anything, I suggest keeping it as your github
-  websiteUrl="__PROJECT_URL__"
+  websiteUrl="gitgithub.com:RobynLlama/UnityDebuggerAssistant.git"
 
   #This is where you put in dependencies in the format
   #DependencyNamespace-ModName = "version.number.here"

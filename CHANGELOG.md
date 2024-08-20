@@ -1,4 +1,4 @@
-# LCMPublishingTemplate Changelog
+# UnityDebuggerAssistant Changelog
 
 ## Describe your changes for each release here
 

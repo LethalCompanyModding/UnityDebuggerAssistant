@@ -1,6 +1,6 @@
-# LCMPublishingTemplate
+# UnityDebuggerAssistant
 
-__PROJECT_DESC__
+A BepinEx plugin that captures Harmony and Monomod (wip) hook information at runtime to ease debugging
 
 ## How to use this Template
 

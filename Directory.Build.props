@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <RepositoryType>git</RepositoryType>
-    <RepositoryUrl>__PROJECT_URL__</RepositoryUrl>
+    <RepositoryUrl>gitgithub.com:RobynLlama/UnityDebuggerAssistant.git</RepositoryUrl>
   </PropertyGroup>
 
   <PropertyGroup>

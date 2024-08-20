@@ -8,10 +8,10 @@
       You should probably not edit them by hand if you've already published
       to the Thunderstore.
     -->
-    <AssemblyName>__PROJECT_GUID__</AssemblyName>
-    <Authors>__PROJECT_AUTHOR__</Authors>
-    <Description>__PROJECT_DESC__</Description>
-    <Product>LCMPublishingTemplate</Product>
+    <AssemblyName>dev.mamallama.lcm.dbgasst</AssemblyName>
+    <Authors>LethalCompanyModding</Authors>
+    <Description>A BepinEx plugin that captures Harmony and Monomod (wip) hook information at runtime to ease debugging</Description>
+    <Product>UnityDebuggerAssistant</Product>
     <!--
       Except this, you should keep this up to date with your publishing tags.
     -->
