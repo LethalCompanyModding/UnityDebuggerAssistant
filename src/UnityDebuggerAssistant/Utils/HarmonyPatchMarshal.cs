@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using HarmonyLib;
@@ -8,46 +9,34 @@ public static class HarmonyPatchMarshal
 {
     public static void RunMarshal()
     {
+        Stopwatch timer = new();
+        timer.Start();
+
         //Get a list of all plugin GUIDs from the Chain loader
         var guids = BepInEx.Bootstrap.Chainloader.PluginInfos.Keys;
 
         //Access the harmony instance for each one
         Harmony harmony;
 
-        //Use a builder cuz why not
-        StringBuilder sb = new("\n\n");
-
-        sb.AppendLine("--- BEGIN MARSHAL ---\n");
-
         foreach (var guid in guids)
         {
-            sb.Append('[');
-            sb.Append(guid);
-            sb.Append(']');
-            sb.AppendLine();
+
+            var assembly = BepInEx.Bootstrap.Chainloader.PluginInfos[guid].Instance.GetType().Assembly;
 
             harmony = new(guid);
             var methods = harmony.GetPatchedMethods();
 
             if (methods.Count() == 0)
-            {
-                sb.AppendLine("  Patches nothing or uses MonoMod");
-                sb.AppendLine();
                 continue;
-            }
 
             //Access each MethodBase for each patch
             foreach (var method in methods)
             {
-                sb.Append("  Patches ");
-                sb.AppendLine(method.FullDescription());
+                PatchStorage.AddPatchInformation(method, assembly);
             }
-
-            sb.AppendLine();
         }
 
-        sb.AppendLine("--- END MARSHAL ---\n");
-
-        Plugin.Log.LogInfo(sb);
+        //Announce
+        Plugin.Log.LogInfo($"Harmony Marshal is updated in {timer.ElapsedMilliseconds}ms");
     }
 }

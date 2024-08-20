@@ -1,5 +1,11 @@
-﻿using BepInEx;
+﻿using System;
+using BepInEx;
 using BepInEx.Logging;
+using HarmonyLib;
+using MonoMod.RuntimeDetour;
+using UnityDebuggerAssistant.Patches;
+using UnityDebuggerAssistant.Utils;
+using UnityEngine;
 
 /*
   Here are some basic resources on code style and naming conventions to help
@@ -28,6 +34,18 @@ public class Plugin : BaseUnityPlugin
 
     // Log our awake here so we can see it in LogOutput.txt file
     Log.LogInfo($"Plugin {LCMPluginInfo.PLUGIN_NAME} is loaded!");
+
+    // Add listeners
+    ILHook.OnDetour += MonoModPatchListener.ListenForPatch;
+
+    //Known issue: Unity blocks this
+    Log.LogInfo($"Registering first chance handler in: {AppDomain.CurrentDomain.FriendlyName}");
+    AppDomain.CurrentDomain.FirstChanceException += FirstChanceHandler.Handle;
+
+    Harmony harmony = new(LCMPluginInfo.PLUGIN_GUID);
+    harmony.PatchAll(typeof(StartOfRoundPatches));
+
+    HarmonyPatchMarshal.RunMarshal();
   }
 
 }
