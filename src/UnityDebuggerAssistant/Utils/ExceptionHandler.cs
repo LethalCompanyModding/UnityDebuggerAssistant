@@ -4,31 +4,32 @@ using System.Text;
 
 namespace UnityDebuggerAssistant.Utils;
 
-public static class FirstChanceHandler
+public static class ExceptionHandler
 {
 
     internal static Exception? lastEvent;
-    public static void Handle(object? source, FirstChanceExceptionEventArgs e)
+    public static void Handle(Exception ex)
     {
 
-        if (lastEvent != null && lastEvent == e.Exception)
+        if (lastEvent != null && lastEvent == ex)
             return;
 
-        var item = lastEvent = e.Exception;
+        lastEvent = ex;
 
         //Process the exception here
-        StringBuilder sb = new("\n--- First Chance Handler ---\n");
+        StringBuilder sb = new("\n\n--- Exception Handler ---\n");
 
         sb.Append("Exception Caught: ");
-        sb.AppendLine(item.GetType().ToString());
+        sb.AppendLine(ex.GetType().ToString());
 
         sb.Append("Target Site: ");
-        sb.AppendLine(item.TargetSite.Name);
+        sb.AppendLine(ex.TargetSite.Name);
 
+        //This might be useless info
         sb.Append("Target Assembly: ");
-        sb.AppendLine(item.TargetSite.GetType().Assembly.GetName().Name);
+        sb.AppendLine(ex.TargetSite.GetType().Assembly.GetName().Name);
 
-        var blames = PatchStorage.GetPatchInformation(item.TargetSite);
+        var blames = PatchStorage.GetPatchInformation(ex.TargetSite);
 
         if (blames.Count > 0)
         {
@@ -36,6 +37,7 @@ public static class FirstChanceHandler
 
             foreach (var blame in blames)
             {
+                sb.Append("  ");
                 sb.AppendLine(blame.GetName().Name);
             }
         }
@@ -44,6 +46,7 @@ public static class FirstChanceHandler
             sb.AppendLine("No blames!");
         }
 
+        sb.AppendLine("\n--- End Exception Handler ---");
         Plugin.Log.LogError(sb);
     }
 

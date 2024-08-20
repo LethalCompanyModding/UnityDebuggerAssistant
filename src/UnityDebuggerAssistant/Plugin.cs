@@ -38,13 +38,13 @@ public class Plugin : BaseUnityPlugin
     // Add listeners
     ILHook.OnDetour += MonoModPatchListener.ListenForPatch;
 
-    //Known issue: Unity blocks this
-    Log.LogInfo($"Registering first chance handler in: {AppDomain.CurrentDomain.FriendlyName}");
-    AppDomain.CurrentDomain.FirstChanceException += FirstChanceHandler.Handle;
-
     Harmony harmony = new(LCMPluginInfo.PLUGIN_GUID);
     harmony.PatchAll(typeof(StartOfRoundPatches));
+    harmony.PatchAll(typeof(ExceptionPatches));
 
+    //This is for the demo exception dump
+    PatchStorage.AddPatchInformation(typeof(HarmonyPatchMarshal).GetMethod("RunMarshal"), this.GetType().Assembly);
+    //This is called way too early so we'll always throw in here
     HarmonyPatchMarshal.RunMarshal();
   }
 

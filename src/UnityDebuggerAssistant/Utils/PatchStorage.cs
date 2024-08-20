@@ -7,12 +7,11 @@ namespace UnityDebuggerAssistant.Utils;
 
 internal static class PatchStorage
 {
-    private static Dictionary<MethodBase, List<Assembly>> Patches = [];
+    private static readonly Dictionary<MethodBase, List<Assembly>> Patches = [];
     private static readonly Assembly HarmonyAssembly = typeof(Harmony).Assembly;
 
     internal static bool AddPatchInformation(MethodBase method, Assembly assembly)
     {
-
         //Ignore Harmony because its doing its own thing
         if (assembly == HarmonyAssembly)
             return false;
