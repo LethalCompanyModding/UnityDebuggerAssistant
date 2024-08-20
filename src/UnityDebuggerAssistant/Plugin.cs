@@ -42,10 +42,12 @@ public class Plugin : BaseUnityPlugin
     harmony.PatchAll(typeof(StartOfRoundPatches));
     harmony.PatchAll(typeof(ExceptionPatches));
 
-    //This is for the demo exception dump
     PatchStorage.AddPatchInformation(typeof(HarmonyPatchMarshal).GetMethod("RunMarshal"), this.GetType().Assembly);
-    //This is called way too early so we'll always throw in here
-    HarmonyPatchMarshal.RunMarshal();
+    PatchStorage.AddPatchInformation(typeof(ExceptionHandler).GetMethod("DebugThrow"), this.GetType().Assembly);
+
+    //Uncomment this to get a demo exception to test with
+    //ExceptionHandler.DebugThrow();
+
   }
 
 }
