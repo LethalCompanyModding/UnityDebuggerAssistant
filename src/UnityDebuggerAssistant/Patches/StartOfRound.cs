@@ -5,11 +5,11 @@ namespace UnityDebuggerAssistant.Patches;
 
 internal class StartOfRoundPatches
 {
-    [HarmonyPatch(typeof(StartOfRound), nameof(StartOfRound.ChangeLevel))]
+    [HarmonyPatch(typeof(StartOfRound), nameof(StartOfRound.Start))]
     [HarmonyPostfix]
-    internal static void UpdateHarmonyListPatch() => HarmonyPatchMarshal.RunMarshal();
+    internal static void UpdateHarmonyListStart() => HarmonyPatchMarshal.RunMarshal();
 
     [HarmonyPatch(typeof(StartOfRound), nameof(StartOfRound.StartGame))]
     [HarmonyPostfix]
-    internal static void UpdateHarmonyListPatch2() => HarmonyPatchMarshal.RunMarshal();
+    internal static void UpdateHarmonyListStartGame() => HarmonyPatchMarshal.RunMarshal();
 }
