@@ -43,7 +43,6 @@ public class Plugin : BaseUnityPlugin
     harmony.PatchAll(typeof(ExceptionPatches));
 
     PatchStorage.AddPatchInformation(typeof(HarmonyPatchMarshal).GetMethod("RunMarshal"), this.GetType().Assembly);
-    PatchStorage.AddPatchInformation(typeof(ExceptionHandler).GetMethod("DebugThrow"), this.GetType().Assembly);
 
     //Uncomment this to get a demo exception to test with
     //ExceptionHandler.DebugThrow();
