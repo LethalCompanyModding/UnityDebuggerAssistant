@@ -37,6 +37,7 @@ public static class HarmonyPatchMarshal
         }
 
         //Announce
+        timer.Stop();
         Plugin.Log.LogInfo($"Harmony Marshal is updated in {timer.ElapsedMilliseconds}ms");
     }
 }
