@@ -22,6 +22,10 @@ public static class HarmonyPatchMarshal
         {
 
             var assembly = BepInEx.Bootstrap.Chainloader.PluginInfos[guid].Instance.GetType().Assembly;
+            var info = BepInEx.Bootstrap.Chainloader.PluginInfos[guid];
+
+            if (info is not null)
+                PatchStorage.AddToInfoCache(assembly, info);
 
             harmony = new(guid);
             var methods = harmony.GetPatchedMethods();
