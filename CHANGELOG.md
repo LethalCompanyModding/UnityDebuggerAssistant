@@ -1,5 +1,9 @@
 # UnityDebuggerAssistant Changelog
 
+## v1.1.1
+
+- Removes LC specific symbol that stopped it from running on other unity games, whoopsie!
+
 ## v1.1.0
 
 - Complete rewrite of Harmony patch handling
