@@ -6,10 +6,14 @@
   - Removes crashing
   - No idea if this effects overall quality of logs
 
+- Now outputs even better symbols
+  - Target Method
+  - Caller (if applicable)
+
 ## v1.0.2
 
 - Now outputs better symbols
-  - Defining Assembly Name for the throwing method
+  - Declaring Assembly Name for the throwing method
   - PluginInfo GUID, Name and Version for Assemblies that contain bepinex plugins
 - Update package documents
 
