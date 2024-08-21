@@ -1,5 +1,11 @@
 # UnityDebuggerAssistant Changelog
 
+## v1.0.3
+
+- Now checks for broken patches and refuses to handle them
+  - Removes crashing
+  - No idea if this effects overall quality of logs
+
 ## v1.0.2
 
 - Now outputs better symbols
