@@ -94,7 +94,7 @@ public static class UDAExceptionHandler
 
         if (blames.Count > 0)
         {
-            sb.AppendLine("Potential Blames:\n");
+            sb.AppendLine("\nPotential Blames:\n");
 
             foreach (var blame in blames)
             {
@@ -109,7 +109,7 @@ public static class UDAExceptionHandler
         }
         else
         {
-            sb.AppendLine("No blames!");
+            sb.AppendLine("\nNo blames!");
         }
 
         sb.AppendLine("\n--- End Exception Handler ---");
