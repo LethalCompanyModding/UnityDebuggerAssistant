@@ -74,10 +74,12 @@ public static class UDAExceptionHandler
 
         if (stackTrace.FrameCount > 1)
         {
-            var caller = stackTrace.GetFrame(1).GetMethod().Name;
+            var caller = stackTrace.GetFrame(1).GetMethod();
 
             sb.Append("Caller: ");
-            sb.AppendLine(caller);
+            sb.Append(caller.DeclaringType.Name);
+            sb.Append('.');
+            sb.AppendLine(caller.Name);
         }
 
         sb.Append("Declaring Assembly: ");
