@@ -12,6 +12,23 @@ public static class ExceptionHandler
     public static void Handle(Exception ex)
     {
 
+        static string Tabs(int n)
+        {
+            return new string(' ', n * 2);
+        }
+
+        static void WritePluginInfo(StringBuilder sb, PluginInfo info, int Indent)
+        {
+            sb.Append(Tabs(Indent));
+            sb.AppendLine("Plugin Info");
+            sb.Append(Tabs(Indent + 1));
+            sb.AppendLine(info.Metadata.GUID);
+            sb.Append(Tabs(Indent + 1));
+            sb.Append(info.Metadata.Name);
+            sb.Append("@");
+            sb.AppendLine(info.Metadata.Version.ToString());
+        }
+
         if (lastEvent != null && lastEvent == ex)
             return;
 
@@ -33,25 +50,24 @@ public static class ExceptionHandler
 
         if (PatchStorage.InfoCache.TryGetValue(declaringAssembly, out PluginInfo info))
         {
-            sb.AppendLine("Plugin Info");
-            sb.Append("  ");
-            sb.AppendLine(info.Metadata.GUID);
-            sb.Append("  ");
-            sb.Append(info.Metadata.Name);
-            sb.Append("@");
-            sb.AppendLine(info.Metadata.Version.ToString());
+            WritePluginInfo(sb, info, 0);
         }
 
         var blames = PatchStorage.GetPatchInformation(ex.TargetSite);
 
         if (blames.Count > 0)
         {
-            sb.AppendLine("Potential Blames:");
+            sb.AppendLine("Potential Blames:\n");
 
             foreach (var blame in blames)
             {
-                sb.Append("  ");
+                sb.Append(Tabs(1));
                 sb.AppendLine(blame.GetName().Name);
+
+                if (PatchStorage.InfoCache.TryGetValue(blame, out PluginInfo bInfo))
+                {
+                    WritePluginInfo(sb, bInfo, 1);
+                }
             }
         }
         else
