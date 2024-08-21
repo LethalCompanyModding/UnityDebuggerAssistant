@@ -1,6 +1,6 @@
 # UnityDebuggerAssistant
 
-A BepinEx plugin that captures Harmony and Monomod hook information at runtime to ease debugging
+A BepinEx plugin that captures Harmony and MonoMod hook information at runtime to ease debugging
 
 ## Maintainers
 
@@ -12,11 +12,12 @@ This mod has been dedicated to the [Lethal Company Modding community repo](https
 
 ## Current Features
 
-- Listens for Harmony or MonoMod Patches
-- Outputs a list of all plugins that modify a specific method when an Exception is thrown targeting that method
+- Enumerates patches from both Harmony and MonoMod/HookGenPatcher
+- Outputs a list of all plugins that modify a specific method when an Exception is thrown within that method
 - Includes useful symbols for debugging such as:
+  - Calling Method for the throwing method
   - Defining Assembly Name for the throwing method
-  - PluginInfo GUID, Name and Version for Assemblies that contain bepinex plugins
+    - PluginInfo GUID, Name and Version for Assemblies that contain BepinEx plugins
 
 ## How Does This Help Me?
 

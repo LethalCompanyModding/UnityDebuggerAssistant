@@ -1,5 +1,14 @@
 # UnityDebuggerAssistant Changelog
 
+## v1.1.0
+
+- Complete rewrite of Harmony patch handling
+  - Understands patches from Prefixes, Postfixes and Finalizers
+
+- Outputs the caller's defining method for better debugging
+
+- Should now be game-agnostic
+
 ## v1.0.3
 
 - Now checks for broken patches and refuses to handle them
@@ -14,7 +23,7 @@
 
 - Now outputs better symbols
   - Declaring Assembly Name for the throwing method
-  - PluginInfo GUID, Name and Version for Assemblies that contain bepinex plugins
+  - PluginInfo GUID, Name and Version for Assemblies that contain BepinEx plugins
 - Update package documents
 
 ## v1.0.1
