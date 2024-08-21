@@ -10,6 +10,9 @@ public class UDAPatchCollector : MonoBehaviour
         Plugin.Log.LogInfo("UDA post-Chainloader startup");
         BepinExPluginMarshal.Run();
 
+#if DEBUG
         UDAExceptionHandler.DebugThrow();
+#endif
+
     }
 }
