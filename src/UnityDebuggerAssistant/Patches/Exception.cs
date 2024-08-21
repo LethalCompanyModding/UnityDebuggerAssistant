@@ -6,7 +6,34 @@ namespace UnityDebuggerAssistant.Patches;
 
 public static class ExceptionPatches
 {
+
+    static bool OperationUnderway = false;
+
     [HarmonyPatch(typeof(Exception), nameof(Exception.StackTrace), MethodType.Getter)]
     [HarmonyPostfix]
-    public static void ExceptionPatch(Exception __instance) => ExceptionHandler.Handle(__instance);
+    public static void ExceptionPatch(Exception __instance)
+    {
+        //Plugin.Log.LogInfo(__instance.GetType());
+
+        if (OperationUnderway)
+        {
+            Plugin.Log.LogInfo("I'm busy");
+            return;
+        }
+
+        OperationUnderway = true;
+
+        try
+        {
+            UDAExceptionHandler.Handle(__instance);
+        }
+        catch (Exception e)
+        {
+            Plugin.Log.LogError(e.Message);
+        }
+        finally
+        {
+            OperationUnderway = false;
+        }
+    }
 }
