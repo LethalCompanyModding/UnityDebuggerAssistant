@@ -1,7 +1,10 @@
 using System;
-using System.Runtime.ExceptionServices;
 using System.Text;
 using BepInEx;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Reflection;
+using HarmonyLib;
 
 namespace UnityDebuggerAssistant.Utils;
 
@@ -40,8 +43,18 @@ public static class ExceptionHandler
         sb.Append("Exception Caught: ");
         sb.AppendLine(ex.GetType().ToString());
 
-        sb.Append("Target Site: ");
-        sb.AppendLine(ex.TargetSite.Name);
+        var target = ex.TargetSite;
+
+        if (target is null)
+        {
+            //Plugin.Log.LogInfo("targets null");
+            return;
+        }
+
+        sb.Append("Target: ");
+        sb.Append(target.DeclaringType.Name);
+        sb.Append('.');
+        sb.AppendLine(target.Name);
 
         var declaringAssembly = ex.TargetSite.DeclaringType.Assembly;
 
@@ -53,7 +66,7 @@ public static class ExceptionHandler
             WritePluginInfo(sb, info, 0);
         }
 
-        var blames = PatchStorage.GetPatchInformation(ex.TargetSite);
+        var blames = PatchStorage.GetPatchInformation(target);
 
         if (blames.Count > 0)
         {
