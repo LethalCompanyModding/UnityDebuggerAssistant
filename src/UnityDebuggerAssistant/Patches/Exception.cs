@@ -29,7 +29,8 @@ public static class ExceptionPatches
         }
         catch (Exception e)
         {
-            Plugin.Log.LogError(e.Message);
+            Plugin.Log.LogError("The exception handler failed while running. Please report the next line to Robyn:");
+            Plugin.Log.LogError(e);
         }
         finally
         {
