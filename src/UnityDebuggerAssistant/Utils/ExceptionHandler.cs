@@ -12,6 +12,9 @@ public static class ExceptionHandler
 {
 
     internal static Exception? lastEvent;
+    internal readonly static List<Assembly> AssemblyWhiteList = [
+        typeof(StartOfRound).Assembly,
+    ];
     public static void Handle(Exception ex)
     {
 
@@ -56,7 +59,26 @@ public static class ExceptionHandler
         sb.Append('.');
         sb.AppendLine(target.Name);
 
-        var declaringAssembly = ex.TargetSite.DeclaringType.Assembly;
+        var declaringAssembly = target.DeclaringType.Assembly;
+
+        //Filter for only exceptions thrown by Assembly-Csharp or Plugins
+        if (!(AssemblyWhiteList.Contains(declaringAssembly) || PatchStorage.InfoCache.ContainsKey(declaringAssembly)))
+        {
+            //Plugin.Log.LogInfo($"Not on whitelist or plugin: {declaringAssembly}");
+            return;
+        }
+
+
+        //Plugin.Log.LogInfo("Stack trace");
+        StackTrace stackTrace = new(ex);
+
+        if (stackTrace.FrameCount > 1)
+        {
+            var caller = stackTrace.GetFrame(1).GetMethod().Name;
+
+            sb.Append("Caller: ");
+            sb.AppendLine(caller);
+        }
 
         sb.Append("Declaring Assembly: ");
         sb.AppendLine(declaringAssembly.GetName().Name);
