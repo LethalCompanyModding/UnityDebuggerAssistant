@@ -1,7 +1,8 @@
-using BepInEx;
+﻿using BepInEx;
 using BepInEx.Logging;
 using HarmonyLib;
 using MonoMod.RuntimeDetour;
+using UnityDebuggerAssistant.Components;
 using UnityDebuggerAssistant.Patches;
 using UnityDebuggerAssistant.Utils;
 using UnityEngine;
@@ -19,6 +20,7 @@ using UnityEngine;
 public class Plugin : BaseUnityPlugin
 {
   public static ManualLogSource Log = null!;
+  internal static Plugin Instance = null!;
 
   private void Awake()
   {
@@ -38,13 +40,17 @@ public class Plugin : BaseUnityPlugin
     ILHook.OnDetour += MonoModPatchListener.ListenForPatch;
 
     Harmony harmony = new(LCMPluginInfo.PLUGIN_GUID);
-    harmony.PatchAll(typeof(StartOfRoundPatches));
     harmony.PatchAll(typeof(ExceptionPatches));
 
-    PatchStorage.AddPatchInformation(typeof(HarmonyPatchMarshal).GetMethod("RunMarshal"), this.GetType().Assembly);
+    Log.LogInfo("Deferring plugin collection..");
 
-    //Uncomment this to get a demo exception to test with
-    //ExceptionHandler.DebugThrow();
+    var go = new GameObject("UDA Patch Collector", [
+      typeof(UDAPatchCollector)
+    ])
+    {
+      hideFlags = HideFlags.HideAndDontSave
+    };
+    DontDestroyOnLoad(go);
 
   }
 
