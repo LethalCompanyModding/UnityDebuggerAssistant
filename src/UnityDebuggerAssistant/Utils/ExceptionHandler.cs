@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System.Collections.Generic;
 using System.Reflection;
 using HarmonyLib;
+using System.Linq;
 
 namespace UnityDebuggerAssistant.Utils;
 
@@ -13,7 +14,8 @@ public static class UDAExceptionHandler
 
     internal static Exception? lastEvent;
     internal readonly static List<Assembly> AssemblyWhiteList = [
-        typeof(StartOfRound).Assembly,
+        GetAssemblyByName("Assembly-CSharp"),
+        GetAssemblyByName("MMHOOK_Assembly-CSharp")
     ];
     public static void Handle(Exception ex)
     {
@@ -137,6 +139,12 @@ public static class UDAExceptionHandler
 
         sb.AppendLine("\n--- End Exception Handler ---");
         Plugin.Log.LogError(sb);
+    }
+
+    static Assembly GetAssemblyByName(string name)
+    {
+        return AppDomain.CurrentDomain.GetAssemblies().
+               SingleOrDefault(assembly => assembly.GetName().Name.Equals(name, StringComparison.InvariantCultureIgnoreCase));
     }
 
     internal static void DebugThrow()
