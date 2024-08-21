@@ -92,6 +92,29 @@ public static class UDAExceptionHandler
 
         var blames = PatchStorage.GetPatchInformation(target);
 
+        var patches = Harmony.GetPatchInfo(target);
+
+        if (patches is not null)
+        {
+            if (patches.Prefixes is not null)
+                foreach (var patch in patches.Prefixes)
+                {
+                    blames.Add(patch.PatchMethod.GetType().Assembly);
+                }
+
+            if (patches.Postfixes is not null)
+                foreach (var patch in patches.Postfixes)
+                {
+                    blames.Add(patch.PatchMethod.GetType().Assembly);
+                }
+
+            if (patches.Finalizers is not null)
+                foreach (var patch in patches.Finalizers)
+                {
+                    blames.Add(patch.PatchMethod.GetType().Assembly);
+                }
+        }
+
         if (blames.Count > 0)
         {
             sb.AppendLine("\nPotential Blames:\n");
