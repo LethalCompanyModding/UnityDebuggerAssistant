@@ -8,7 +8,7 @@ using HarmonyLib;
 
 namespace UnityDebuggerAssistant.Utils;
 
-public static class ExceptionHandler
+public static class UDAExceptionHandler
 {
 
     internal static Exception? lastEvent;
