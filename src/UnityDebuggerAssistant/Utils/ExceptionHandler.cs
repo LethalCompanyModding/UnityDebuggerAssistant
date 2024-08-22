@@ -63,12 +63,22 @@ public static class UDAExceptionHandler
 
         var declaringAssembly = target.DeclaringType.Assembly;
 
-        //Filter for only exceptions thrown by Assembly-Csharp or Plugins
-        if (!(AssemblyWhiteList.Contains(declaringAssembly) || PatchStorage.InfoCache.ContainsKey(declaringAssembly)))
+        static bool ShouldUseWhitelist()
         {
-            //Plugin.Log?.LogInfo($"Not on whitelist or plugin: {declaringAssembly}");
-            return;
+            if (Plugin.EnableWhitelisting is not null && Plugin.EnableWhitelisting.Value)
+                return true;
+
+            return false;
         }
+
+        //Check for whitelist config
+        if (ShouldUseWhitelist())
+            //Filter for only exceptions thrown by Assembly-Csharp or Plugins
+            if (!(AssemblyWhiteList.Contains(declaringAssembly) || PatchStorage.InfoCache.ContainsKey(declaringAssembly)))
+            {
+                //Plugin.Log?.LogInfo($"Not on whitelist or plugin: {declaringAssembly}");
+                return;
+            }
 
 
         //Plugin.Log?.LogInfo("Stack trace");
