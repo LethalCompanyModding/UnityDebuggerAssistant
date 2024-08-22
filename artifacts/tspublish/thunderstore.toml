@@ -42,6 +42,7 @@
     "cult-of-the-lamb",
     "last-train-outta-wormtown",
     "lethal-company",
+    "ultimate-chicken-horse",
     "ultrakill",
     "valheim",
   ]
@@ -52,5 +53,6 @@
     cult-of-the-lamb         =["mods", "tools"]
     last-train-outta-wormtown=["mods", "tools"]
     lethal-company           =["mods", "tools"]
+    ultimate-chicken-horse   =["mods", "tools"]
     ultrakill                =["mods", "tools"]
     valheim                  =["mods", "tools"]
