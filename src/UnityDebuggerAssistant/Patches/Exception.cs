@@ -46,7 +46,7 @@ internal static class ExceptionProcessor
     {
         if (OperationUnderway)
         {
-            Plugin.Log?.LogInfo("I'm busy");
+            Plugin.Log?.LogWarning("Exception processor is busy");
             return;
         }
 
