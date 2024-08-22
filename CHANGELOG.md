@@ -1,5 +1,9 @@
 # UnityDebuggerAssistant Changelog
 
+## v1.2.1
+
+- Documentation updated
+
 ## v1.2.0
 
 - Adds two new config options

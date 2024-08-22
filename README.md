@@ -2,6 +2,15 @@
 
 A BepinEx plugin that captures Harmony and MonoMod hook information at runtime to ease debugging
 
+## Supported Games
+
+- [Lethal Company](https://thunderstore.io/c/lethal-company/p/LethalCompanyModding/UnityDebuggerAssistant/)
+- [Valheim](https://thunderstore.io/c/valheim/p/LethalCompanyModding/UnityDebuggerAssistant/)
+- [ULTRAKILL](https://thunderstore.io/c/ultrakill/p/LethalCompanyModding/UnityDebuggerAssistant/)
+- [Cult of The Lamb](https://thunderstore.io/c/cult-of-the-lamb/p/LethalCompanyModding/UnityDebuggerAssistant/)
+- [Last Train Outta Wormtown](https://thunderstore.io/c/last-train-outta-wormtown/p/LethalCompanyModding/UnityDebuggerAssistant/)
+- [Ultimate Chicken Horse](https://thunderstore.io/c/ultimate-chicken-horse/p/LethalCompanyModding/UnityDebuggerAssistant/)
+
 ## Maintainers
 
 **Original Author**: Robyn
