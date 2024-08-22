@@ -30,8 +30,10 @@ public static class UDAExceptionHandler
             sb.Append(Tabs(Indent));
             sb.AppendLine("Plugin Info");
             sb.Append(Tabs(Indent + 1));
+            sb.Append("GUID:     ");
             sb.AppendLine(info.Metadata.GUID);
             sb.Append(Tabs(Indent + 1));
+            sb.Append("NAME/VER: ");
             sb.Append(info.Metadata.Name);
             sb.Append("@");
             sb.AppendLine(info.Metadata.Version.ToString());
