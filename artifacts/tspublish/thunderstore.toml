@@ -38,8 +38,13 @@
 
 #Don't change this
 [publish]
-  communities=["lethal-company", "valheim"]
-  repository ="https://thunderstore.io"
+  communities=[
+    "cult-of-the-lamb",
+    "lethal-company",
+    "ultrakill",
+    "valheim",
+  ]
+  repository="https://thunderstore.io"
 
   #There is a list of tags in the tutorial
   [publish.categories]
