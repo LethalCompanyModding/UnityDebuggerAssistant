@@ -38,6 +38,7 @@ public class Plugin : BaseUnityPlugin
 
     // Log our awake here so we can see it in LogOutput.txt file
     Log.LogInfo($"Plugin {LCMPluginInfo.PLUGIN_NAME} is loaded!");
+    Log.LogInfo($"Using whitelist: {EnableWhitelisting.Value}");
 
     // Add listeners
     ILHook.OnDetour += MonoModPatchListener.ListenForPatch;
