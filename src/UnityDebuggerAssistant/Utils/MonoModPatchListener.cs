@@ -9,7 +9,7 @@ public static class MonoModPatchListener
     internal static bool ListenForPatch(ILHook hook, MethodBase @base, ILContext.Manipulator manipulator)
     {
 
-        if (@base is null || manipulator is null || hook is null)
+        if (@base is null || manipulator is null || hook is null || manipulator.Target is null)
         {
             Plugin.Log.LogInfo("Skipping a null/empty patch");
             return true;
