@@ -21,7 +21,8 @@ using UnityEngine;
 public class Plugin : BaseUnityPlugin
 {
   public static ManualLogSource? Log;
-  internal static ConfigEntry<bool>? EnableWhitelisting;
+  internal static ConfigEntry<bool> EnableWhitelisting = null!;
+  internal static ConfigEntry<bool> EnableExperimentalMode = null!;
 
   private void Awake()
   {
@@ -34,7 +35,8 @@ public class Plugin : BaseUnityPlugin
     */
     Log = Logger;
 
-    EnableWhitelisting = Config.Bind(new("ExceptionHandler", "EnableWhiteList"), true, new("Whether or not to use the whitelist. Disabling this may impact performance but will catch a lot more exceptions"));
+    EnableWhitelisting = Config.Bind(new("ExceptionHandler", "EnableWhiteList"), true, new("By default the whitelist ensures we only check exceptions inside Assembly-Csharp, plugins and common game assemblies.\nDisable this to catch everything. Will somewhat effect performance."));
+    EnableExperimentalMode = Config.Bind(new("ExceptionHandler", "EnableExperimentalMode"), false, new("--- WARNING ---\nThis mode is highly aggressive and will catch every exception thrown,\neven ones that are safely caught later\nMay be unstable and more dramatically effect performance"));
 
     // Log our awake here so we can see it in LogOutput.txt file
     Log.LogInfo($"Plugin {LCMPluginInfo.PLUGIN_NAME} is loaded!");
@@ -44,7 +46,11 @@ public class Plugin : BaseUnityPlugin
     ILHook.OnDetour += MonoModPatchListener.ListenForPatch;
 
     Harmony harmony = new(LCMPluginInfo.PLUGIN_GUID);
-    harmony.PatchAll(typeof(ExceptionTracePatch));
+
+    if (EnableExperimentalMode.Value)
+      harmony.PatchAll(typeof(ExceptionConstructorPatch));
+    else
+      harmony.PatchAll(typeof(ExceptionTracePatch));
 
     Log.LogInfo("Deferring plugin collection..");
 
