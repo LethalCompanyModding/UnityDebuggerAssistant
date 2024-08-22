@@ -1,4 +1,5 @@
-using BepInEx;
+﻿using BepInEx;
+using BepInEx.Configuration;
 using BepInEx.Logging;
 using HarmonyLib;
 using MonoMod.RuntimeDetour;
@@ -32,6 +33,8 @@ public class Plugin : BaseUnityPlugin
       We assign it here
     */
     Log = Logger;
+
+    EnableWhitelisting = Config.Bind(new("ExceptionHandler", "EnableWhiteList"), true, new("Whether or not to use the whitelist. Disabling this may impact performance but will catch a lot more exceptions"));
 
     // Log our awake here so we can see it in LogOutput.txt file
     Log.LogInfo($"Plugin {LCMPluginInfo.PLUGIN_NAME} is loaded!");
