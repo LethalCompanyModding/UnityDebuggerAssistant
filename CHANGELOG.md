@@ -1,5 +1,9 @@
 # UnityDebuggerAssistant Changelog
 
+## v1.1.2
+
+- Adds a check for null targets in ILHooks which can be sent by MonoMod IL patches
+
 ## v1.1.1
 
 - Removes LC specific symbol that stopped it from running on other unity games, whoopsie!
