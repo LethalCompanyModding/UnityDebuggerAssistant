@@ -13,11 +13,11 @@ public static class ExceptionPatches
     [HarmonyPostfix]
     public static void ExceptionPatch(Exception __instance)
     {
-        //Plugin.Log.LogInfo(__instance.GetType());
+        //Plugin.Log?.LogInfo(__instance.GetType());
 
         if (OperationUnderway)
         {
-            Plugin.Log.LogInfo("I'm busy");
+            Plugin.Log?.LogInfo("I'm busy");
             return;
         }
 
@@ -29,8 +29,8 @@ public static class ExceptionPatches
         }
         catch (Exception e)
         {
-            Plugin.Log.LogError("The exception handler failed while running. Please report the next line to Robyn:");
-            Plugin.Log.LogError(e);
+            Plugin.Log?.LogError("The exception handler failed while running. Please report the next line to Robyn:");
+            Plugin.Log?.LogError(e);
         }
         finally
         {

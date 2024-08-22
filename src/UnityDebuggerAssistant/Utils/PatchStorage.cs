@@ -24,7 +24,7 @@ internal static class PatchStorage
             return false;
 
         inList.Add(assembly);
-        Plugin.Log.LogInfo($"blame {assembly.GetName().Name} for {method.FullDescription()}");
+        Plugin.Log?.LogInfo($"blame {assembly.GetName().Name} for {method.FullDescription()}");
         return true;
     }
 

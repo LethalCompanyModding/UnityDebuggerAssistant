@@ -11,14 +11,14 @@ public static class MonoModPatchListener
 
         if (@base is null || manipulator is null || hook is null || manipulator.Target is null)
         {
-            Plugin.Log.LogInfo("Skipping a null/empty patch");
+            Plugin.Log?.LogInfo("Skipping a null/empty patch");
             return true;
         }
 
         /*
-        Plugin.Log.LogInfo(hook.Manipulator);
-        Plugin.Log.LogInfo(@base.Name);
-        Plugin.Log.LogInfo(manipulator);
+        Plugin.Log?.LogInfo(hook.Manipulator);
+        Plugin.Log?.LogInfo(@base.Name);
+        Plugin.Log?.LogInfo(manipulator);
         */
 
         PatchStorage.AddPatchInformation(@base, manipulator.Target.GetType().Assembly);

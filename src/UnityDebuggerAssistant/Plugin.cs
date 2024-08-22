@@ -1,4 +1,4 @@
-﻿using BepInEx;
+using BepInEx;
 using BepInEx.Logging;
 using HarmonyLib;
 using MonoMod.RuntimeDetour;
@@ -19,8 +19,8 @@ using UnityEngine;
 [BepInPlugin(LCMPluginInfo.PLUGIN_GUID, LCMPluginInfo.PLUGIN_NAME, LCMPluginInfo.PLUGIN_VERSION)]
 public class Plugin : BaseUnityPlugin
 {
-  public static ManualLogSource Log = null!;
-  internal static Plugin Instance = null!;
+  public static ManualLogSource? Log;
+  internal static ConfigEntry<bool>? EnableWhitelisting;
 
   private void Awake()
   {

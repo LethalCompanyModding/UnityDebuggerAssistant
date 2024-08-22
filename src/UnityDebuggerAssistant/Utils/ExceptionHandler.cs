@@ -52,7 +52,7 @@ public static class UDAExceptionHandler
 
         if (target is null)
         {
-            //Plugin.Log.LogInfo("targets null");
+            //Plugin.Log?.LogInfo("targets null");
             return;
         }
 
@@ -66,12 +66,12 @@ public static class UDAExceptionHandler
         //Filter for only exceptions thrown by Assembly-Csharp or Plugins
         if (!(AssemblyWhiteList.Contains(declaringAssembly) || PatchStorage.InfoCache.ContainsKey(declaringAssembly)))
         {
-            //Plugin.Log.LogInfo($"Not on whitelist or plugin: {declaringAssembly}");
+            //Plugin.Log?.LogInfo($"Not on whitelist or plugin: {declaringAssembly}");
             return;
         }
 
 
-        //Plugin.Log.LogInfo("Stack trace");
+        //Plugin.Log?.LogInfo("Stack trace");
         StackTrace stackTrace = new(ex);
 
         if (stackTrace.FrameCount > 1)
@@ -138,7 +138,7 @@ public static class UDAExceptionHandler
         }
 
         sb.AppendLine("\n--- End Exception Handler ---");
-        Plugin.Log.LogError(sb);
+        Plugin.Log?.LogError(sb);
     }
 
     static Assembly GetAssemblyByName(string name)

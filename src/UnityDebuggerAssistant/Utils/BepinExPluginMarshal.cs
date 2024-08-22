@@ -24,6 +24,6 @@ public static class BepinExPluginMarshal
 
         //Announce time taken
         timer.Stop();
-        Plugin.Log.LogInfo($"BepinEx Plugins Marshaled in {timer.ElapsedMilliseconds}ms");
+        Plugin.Log?.LogInfo($"BepinEx Plugins Marshaled in {timer.ElapsedMilliseconds}ms");
     }
 }
