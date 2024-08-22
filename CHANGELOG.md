@@ -1,5 +1,11 @@
 # UnityDebuggerAssistant Changelog
 
+## v1.2.0
+
+- Adds two new config options
+  - EnableWhiteList, enables or disables the built in whitelist for exceptions
+  - EnableExperimentalMod, turns on an aggressive but experimental filter mode. Useful for deep debugging but should probably not be used in actual gameplay
+
 ## v1.1.2
 
 - Adds a check for null targets in ILHooks which can be sent by MonoMod IL patches
