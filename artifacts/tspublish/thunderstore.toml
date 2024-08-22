@@ -40,6 +40,7 @@
 [publish]
   communities=[
     "cult-of-the-lamb",
+    "last-train-outta-wormtown",
     "lethal-company",
     "ultrakill",
     "valheim",
@@ -48,7 +49,8 @@
 
   #There is a list of tags in the tutorial
   [publish.categories]
-    cult-of-the-lamb=["mods", "tools"]
-    lethal-company  =["mods", "tools"]
-    ultrakill       =["mods", "tools"]
-    valheim         =["mods", "tools"]
+    cult-of-the-lamb         =["mods", "tools"]
+    last-train-outta-wormtown=["mods", "tools"]
+    lethal-company           =["mods", "tools"]
+    ultrakill                =["mods", "tools"]
+    valheim                  =["mods", "tools"]
