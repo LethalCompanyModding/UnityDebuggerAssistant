@@ -44,7 +44,7 @@ public class Plugin : BaseUnityPlugin
     ILHook.OnDetour += MonoModPatchListener.ListenForPatch;
 
     Harmony harmony = new(LCMPluginInfo.PLUGIN_GUID);
-    harmony.PatchAll(typeof(ExceptionPatches));
+    harmony.PatchAll(typeof(ExceptionTracePatch));
 
     Log.LogInfo("Deferring plugin collection..");
 
