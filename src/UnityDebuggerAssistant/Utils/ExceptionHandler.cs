@@ -62,7 +62,9 @@ public static class UDAExceptionHandler
 
         if (target is null)
         {
-            //Plugin.Log?.LogInfo("targets null");
+#if DEBUG
+            Plugin.Log?.LogInfo("targets null");
+#endif
             return;
         }
 
@@ -86,7 +88,9 @@ public static class UDAExceptionHandler
             //Filter for only exceptions thrown by Assembly-Csharp or Plugins
             if (!(AssemblyWhiteList.Contains(declaringAssembly) || PatchStorage.InfoCache.ContainsKey(declaringAssembly)))
             {
-                //Plugin.Log?.LogInfo($"Not on whitelist or plugin: {declaringAssembly}");
+#if DEBUG
+                Plugin.Log?.LogInfo($"Not on whitelist or plugin: {declaringAssembly}");
+#endif
                 return;
             }
 
