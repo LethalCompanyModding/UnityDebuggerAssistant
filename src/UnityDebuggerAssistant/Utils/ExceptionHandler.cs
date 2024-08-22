@@ -27,6 +27,10 @@ public static class UDAExceptionHandler
 
         static void WritePluginInfo(StringBuilder sb, PluginInfo info, int Indent)
         {
+
+            static string GetPluginDirSandboxed(PluginInfo info) => $"plugins{info.Location.Split("plugins")[1]}";
+
+            sb.AppendLine();
             sb.Append(Tabs(Indent));
             sb.AppendLine("Plugin Info");
             sb.Append(Tabs(Indent + 1));
@@ -37,6 +41,10 @@ public static class UDAExceptionHandler
             sb.Append(info.Metadata.Name);
             sb.Append("@");
             sb.AppendLine(info.Metadata.Version.ToString());
+            sb.Append(Tabs(Indent + 1));
+            sb.Append("LOCATION: ");
+            sb.AppendLine(GetPluginDirSandboxed(info));
+
         }
 
         if (lastEvent != null && lastEvent == ex)
