@@ -32,6 +32,16 @@ public static class UDAExceptionHandler
         }
 
         var trace = new StackTrace(ex, true);
+        var assembly = targets.DeclaringType.Assembly;
+
+        //Filter the main assembly
+        if (ShouldUseWhitelist() && !WhiteListContains(assembly))
+        {
+#if DEBUG
+            Plugin.Log?.LogInfo($"Skipping {assembly.GetName().Name}, not on whitelist");
+#endif
+            return;
+        }
 
         static string Tabs(int n)
         {
@@ -189,17 +199,15 @@ public static class UDAExceptionHandler
         sb.Append("Exception Caught: ");
         sb.AppendLine(ex.GetType().ToString());
 
-        if (targets is not null)
+        sb.Append("Assembly: ");
+        sb.AppendLine(assembly.GetName().Name);
+
+        if (PatchStorage.InfoCache.TryGetValue(ex.TargetSite.DeclaringType.Assembly, out PluginInfo info))
         {
-            sb.Append("Assembly: ");
-            sb.AppendLine(targets.DeclaringType.Assembly.GetName().Name);
-
-            if (PatchStorage.InfoCache.TryGetValue(ex.TargetSite.DeclaringType.Assembly, out PluginInfo info))
-            {
-                WritePluginInfo(sb, info, 1);
-            }
-
+            WritePluginInfo(sb, info, 1);
         }
+
+
 
         sb.Append("Message: ");
         sb.AppendLine(ex.Message);
