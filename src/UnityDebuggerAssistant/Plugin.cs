@@ -1,4 +1,4 @@
-﻿using BepInEx;
+using BepInEx;
 using BepInEx.Configuration;
 using BepInEx.Logging;
 using HarmonyLib;
@@ -36,7 +36,6 @@ public class Plugin : BaseUnityPlugin
     Log = Logger;
 
     EnableWhitelisting = Config.Bind(new("ExceptionHandler", "EnableWhiteList"), true, new("By default the whitelist ensures we only check exceptions inside Assembly-Csharp, plugins and common game assemblies.\nDisable this to catch everything. Will somewhat effect performance."));
-    EnableExperimentalMode = Config.Bind(new("ExceptionHandler", "EnableExperimentalMode"), false, new("--- WARNING ---\nThis mode is highly aggressive and will catch every exception thrown,\neven ones that are safely caught later\nMay be unstable and more dramatically effect performance"));
 
     // Log our awake here so we can see it in LogOutput.txt file
     Log.LogInfo($"Plugin {LCMPluginInfo.PLUGIN_NAME} is loaded!");
