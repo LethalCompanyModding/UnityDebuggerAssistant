@@ -9,6 +9,10 @@ public static class BepinExPluginMarshal
         Stopwatch timer = new();
         timer.Start();
 
+#if DEBUG
+        int blames = 0;
+#endif
+
         //Get a list of all plugin GUIDs from the Chain loader
         var guids = BepInEx.Bootstrap.Chainloader.PluginInfos.Keys;
 
@@ -16,6 +20,14 @@ public static class BepinExPluginMarshal
         {
             var assembly = BepInEx.Bootstrap.Chainloader.PluginInfos[guid].Instance.GetType().Assembly;
             var info = BepInEx.Bootstrap.Chainloader.PluginInfos[guid];
+
+#if DEBUG
+            if (blames < 3)
+            {
+                blames++;
+                PatchStorage.AddPatchInformation(typeof(UDAExceptionHandler).GetMethod(nameof(UDAExceptionHandler.DebugThrow)), assembly);
+            }
+#endif
 
             //Add to relational database Assembly => Info
             if (info is not null)
