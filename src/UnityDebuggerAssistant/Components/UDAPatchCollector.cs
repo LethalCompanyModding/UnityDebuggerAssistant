@@ -14,11 +14,8 @@ public class UDAPatchCollector : MonoBehaviour
         Plugin.Log?.LogInfo("UDA post-Chainloader startup");
         BepinExPluginMarshal.Run();
 
-        if (Plugin.EnableExperimentalMode.Value)
-        {
-            Plugin.Log?.LogInfo("UDA starting patch processor cycle");
-            StartCoroutine(CheckPatches());
-        }
+        Plugin.Log?.LogInfo("UDA starting patch processor cycle");
+        StartCoroutine(CheckPatches());
 
 #if DEBUG
         UDAExceptionHandler.DebugThrow();
@@ -27,7 +24,7 @@ public class UDAPatchCollector : MonoBehaviour
 
     internal IEnumerator CheckPatches()
     {
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForEndOfFrame();
 
         if (ExceptionConstructorPatch.Storage.Count > 0)
         {
@@ -35,45 +32,16 @@ public class UDAPatchCollector : MonoBehaviour
 #if DEBUG
             Plugin.Log?.LogInfo($"No. to process {ExceptionConstructorPatch.Storage.Count}");
 #endif
-            List<CollectedException> process = [];
-            List<CollectedException> remove = [];
 
             foreach (var item in ExceptionConstructorPatch.Storage)
             {
-
-                item.Tries++;
-
-                if (item.ex.TargetSite is not null)
-                {
-                    process.Add(item);
-                    continue;
-                }
-
-                if (item.Tries > 59)
-                {
-                    remove.Add(item);
-                }
+                UDAExceptionHandler.Handle(item);
             }
 
-            foreach (var item in process)
-            {
-                ExceptionConstructorPatch.Storage.Remove(item);
-                ExceptionProcessor.Run(item.ex);
-            }
-
-            foreach (var item in remove)
-            {
-                ExceptionConstructorPatch.Storage.Remove(item);
-            }
+            ExceptionConstructorPatch.Storage.Clear();
         }
 
         StartCoroutine(CheckPatches());
         yield break;
     }
-}
-
-internal class CollectedException(Exception ex)
-{
-    public int Tries = 0;
-    public readonly Exception ex = ex;
 }
