@@ -3,7 +3,6 @@ using System.Reflection;
 using System.Collections.Generic;
 using HarmonyLib;
 using UnityDebuggerAssistant.Utils;
-using UnityDebuggerAssistant.Components;
 
 namespace UnityDebuggerAssistant.Patches;
 [HarmonyPatch]

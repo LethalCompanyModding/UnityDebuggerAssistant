@@ -7,7 +7,6 @@ using System.Reflection;
 using HarmonyLib;
 using System.Linq;
 using System.Runtime.CompilerServices;
-using UnityEngine.Rendering.HighDefinition;
 
 namespace UnityDebuggerAssistant.Utils;
 
