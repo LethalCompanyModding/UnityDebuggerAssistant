@@ -6,20 +6,11 @@ using UnityDebuggerAssistant.Utils;
 using UnityDebuggerAssistant.Components;
 
 namespace UnityDebuggerAssistant.Patches;
-
-public static class ExceptionTracePatch
-{
-
-    [HarmonyPatch(typeof(Exception), nameof(Exception.StackTrace), MethodType.Getter)]
-    [HarmonyPostfix]
-    public static void Patch(Exception __instance) => ExceptionProcessor.Run(__instance);
-}
-
 [HarmonyPatch]
 public static class ExceptionConstructorPatch
 {
 
-    internal static readonly List<CollectedException> Storage = [];
+    internal static readonly List<Exception> Storage = [];
 
     static IEnumerable<MethodBase> TargetMethods()
     {
@@ -28,13 +19,10 @@ public static class ExceptionConstructorPatch
 
     static void Postfix(Exception __instance)
     {
-        foreach (var item in Storage)
-        {
-            if (item.ex == __instance)
-                return;
-        }
+        if (Storage.Contains(__instance))
+            return;
 
-        Storage.Add(new(__instance));
+        Storage.Add(__instance);
     }
 }
 internal static class ExceptionProcessor
