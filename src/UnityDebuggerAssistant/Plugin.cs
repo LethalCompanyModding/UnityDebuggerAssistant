@@ -1,4 +1,4 @@
-using BepInEx;
+﻿using BepInEx;
 using BepInEx.Configuration;
 using BepInEx.Logging;
 using HarmonyLib;
@@ -46,10 +46,7 @@ public class Plugin : BaseUnityPlugin
 
     Harmony harmony = new(LCMPluginInfo.PLUGIN_GUID);
 
-    if (EnableExperimentalMode.Value)
-      harmony.PatchAll(typeof(ExceptionConstructorPatch));
-    else
-      harmony.PatchAll(typeof(ExceptionTracePatch));
+    harmony.PatchAll(typeof(ExceptionConstructorPatch));
 
     Log.LogInfo("Deferring plugin collection..");
 
