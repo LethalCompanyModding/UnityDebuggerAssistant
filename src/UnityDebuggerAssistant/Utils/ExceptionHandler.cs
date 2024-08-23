@@ -19,16 +19,18 @@ public static class UDAExceptionHandler
     public static void Handle(Exception ex)
     {
 
-        if (ex.TargetSite is null)
+        var targets = ex.TargetSite;
+        int outFrames = 0;
+
+        if (targets is null)
         {
 #if DEBUG
-            Plugin.Log?.LogInfo($"Throwing away a bad exception {ex.GetType()}");
+            Plugin.Log?.LogInfo($"Skipping {ex.GetType()}");
 #endif
             return;
         }
 
         var trace = new StackTrace(ex, true);
-        int outFrames = 0;
 
         static string Tabs(int n)
         {
@@ -67,6 +69,7 @@ public static class UDAExceptionHandler
             sb.Append(Tabs(Indent + 1));
             sb.Append("LOCATION: ");
             sb.AppendLine(GetPluginDirSandboxed(info));
+            sb.AppendLine();
 
         }
 
@@ -109,7 +112,6 @@ public static class UDAExceptionHandler
                     sb.Append(method.DeclaringType.Name);
                     sb.Append('.');
                     sb.AppendLine(method.Name);
-
                     sb.AppendLine();
 
                     static void DumpPatch(StringBuilder sb, Assembly assembly, int Indent)
@@ -126,6 +128,12 @@ public static class UDAExceptionHandler
                     var monoModBlames = PatchStorage.GetPatchInformation(method);
                     var harmonyBlames = Harmony.GetPatchInfo(method);
 
+                    if (monoModBlames.Count > 0 || harmonyBlames is not null)
+                    {
+                        sb.Append(Tabs(Indent));
+                        sb.AppendLine("Patched By:");
+                    }
+
                     foreach (var blame in monoModBlames)
                     {
                         DumpPatch(sb, blame, Indent + 1);
@@ -133,7 +141,6 @@ public static class UDAExceptionHandler
 
                     if (harmonyBlames is not null)
                     {
-                        sb.AppendLine("Patched By:");
 
                         if (harmonyBlames.Prefixes is not null)
                             foreach (var patch in harmonyBlames.Prefixes)
@@ -172,12 +179,25 @@ public static class UDAExceptionHandler
         sb.Append("Exception Caught: ");
         sb.AppendLine(ex.GetType().ToString());
 
+        if (targets is not null)
+        {
+            sb.Append("Assembly: ");
+            sb.AppendLine(targets.DeclaringType.Assembly.GetName().Name);
+
+            if (PatchStorage.InfoCache.TryGetValue(ex.TargetSite.DeclaringType.Assembly, out PluginInfo info))
+            {
+                WritePluginInfo(sb, info, 1);
+            }
+
+        }
+
         sb.Append("Message: ");
         sb.AppendLine(ex.Message);
 
-        if (PatchStorage.InfoCache.TryGetValue(ex.TargetSite.DeclaringType.Assembly, out PluginInfo info))
+        if (ex.Source is not null)
         {
-            WritePluginInfo(sb, info, 1);
+            sb.Append("Source: ");
+            sb.AppendLine(ex.Source);
         }
 
         sb.AppendLine();
@@ -188,10 +208,21 @@ public static class UDAExceptionHandler
 
         foreach (var item in trace.GetFrames())
         {
-            if (DumpFrame(sb, item, 2))
+
+            var sbi = new StringBuilder();
+
+            if (DumpFrame(sbi, item, 2))
             {
+                sb.Append(Tabs(1));
+                sb.Append("--FRAME ");
+
                 outFrames++;
+                sb.Append(outFrames);
+                sb.AppendLine(":");
+
+                sb.Append(sbi);
             }
+
         }
 
         sb.Append(Tabs(1));
@@ -210,7 +241,12 @@ public static class UDAExceptionHandler
     }
 
     [MethodImpl(MethodImplOptions.NoInlining)]
+#if DEBUG
+    public static void DebugThrow()
+#endif
+#if !DEBUG
     internal static void DebugThrow()
+#endif
     {
         throw new Exception("Debug throw");
     }
