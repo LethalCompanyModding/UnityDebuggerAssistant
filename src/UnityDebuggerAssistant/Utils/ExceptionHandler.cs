@@ -6,13 +6,13 @@ using System.Collections.Generic;
 using System.Reflection;
 using HarmonyLib;
 using System.Linq;
+using System.Runtime.CompilerServices;
+using UnityEngine.Rendering.HighDefinition;
 
 namespace UnityDebuggerAssistant.Utils;
 
 public static class UDAExceptionHandler
 {
-
-    internal static Exception? lastEvent;
     internal readonly static List<Assembly> AssemblyWhiteList = [
         GetAssemblyByName("Assembly-CSharp"),
         GetAssemblyByName("MMHOOK_Assembly-CSharp")
@@ -20,9 +20,33 @@ public static class UDAExceptionHandler
     public static void Handle(Exception ex)
     {
 
+        if (ex.TargetSite is null)
+        {
+#if DEBUG
+            Plugin.Log?.LogInfo($"Throwing away a bad exception {ex.GetType()}");
+#endif
+            return;
+        }
+
+        var trace = new StackTrace(ex, true);
+        int outFrames = 0;
+
         static string Tabs(int n)
         {
             return new string(' ', n * 2);
+        }
+
+        static bool ShouldUseWhitelist()
+        {
+            if (Plugin.EnableWhitelisting is not null && Plugin.EnableWhitelisting.Value)
+                return true;
+
+            return false;
+        }
+
+        static bool WhiteListContains(Assembly assembly)
+        {
+            return PatchStorage.InfoCache.ContainsKey(assembly) || AssemblyWhiteList.Contains(assembly);
         }
 
         static void WritePluginInfo(StringBuilder sb, PluginInfo info, int Indent)
@@ -47,10 +71,101 @@ public static class UDAExceptionHandler
 
         }
 
-        if (lastEvent != null && lastEvent == ex)
-            return;
+        static bool DumpFrame(StringBuilder sb, StackFrame frame, int Indent)
+        {
 
-        lastEvent = ex;
+            var method = frame.GetMethod();
+            var ILOffset = frame.GetILOffset();
+            bool dumpedAnyFrames = false;
+
+            //We have a method
+            if (frame.GetMethod() is not null)
+            {
+                var InAssembly = frame.GetMethod().DeclaringType.Assembly;
+
+                if (!ShouldUseWhitelist() || (ShouldUseWhitelist() && WhiteListContains(InAssembly)))
+                {
+                    //Dump the information about this frame's method
+                    //and the user wants to see this frame so dump it
+
+                    dumpedAnyFrames = true;
+
+                    sb.Append(Tabs(Indent));
+                    sb.Append("In Assembly: ");
+                    sb.AppendLine(InAssembly.GetName().Name);
+
+                    if (frame.HasSource())
+                    {
+                        sb.Append(Tabs(Indent));
+                        sb.Append("Source: ");
+                        sb.Append(frame.GetFileName());
+                        sb.Append(':');
+                        sb.Append(frame.GetFileLineNumber());
+                        sb.Append(',');
+                        sb.AppendLine(frame.GetFileColumnNumber().ToString());
+                    }
+
+                    sb.Append(Tabs(Indent));
+                    sb.Append("Target Method: ");
+                    sb.Append(method.DeclaringType.Name);
+                    sb.Append('.');
+                    sb.AppendLine(method.Name);
+
+                    sb.AppendLine();
+
+                    static void DumpPatch(StringBuilder sb, Assembly assembly, int Indent)
+                    {
+                        sb.Append(Tabs(Indent));
+                        sb.AppendLine(assembly.GetName().Name);
+
+                        if (PatchStorage.InfoCache.TryGetValue(assembly, out PluginInfo bInfo))
+                        {
+                            WritePluginInfo(sb, bInfo, Indent);
+                        }
+                    }
+
+                    var monoModBlames = PatchStorage.GetPatchInformation(method);
+                    var harmonyBlames = Harmony.GetPatchInfo(method);
+
+                    foreach (var blame in monoModBlames)
+                    {
+                        DumpPatch(sb, blame, Indent + 1);
+                    }
+
+                    if (harmonyBlames is not null)
+                    {
+                        sb.AppendLine("Patched By:");
+
+                        if (harmonyBlames.Prefixes is not null)
+                            foreach (var patch in harmonyBlames.Prefixes)
+                            {
+                                DumpPatch(sb, patch.PatchMethod.GetType().Assembly, Indent + 1);
+                            }
+
+                        if (harmonyBlames.Postfixes is not null)
+                            foreach (var patch in harmonyBlames.Postfixes)
+                            {
+                                DumpPatch(sb, patch.PatchMethod.GetType().Assembly, Indent + 1);
+                            }
+
+                        if (harmonyBlames.Finalizers is not null)
+                            foreach (var patch in harmonyBlames.Finalizers)
+                            {
+                                DumpPatch(sb, patch.PatchMethod.GetType().Assembly, Indent + 1);
+                            }
+                    }
+                }
+                else
+                {
+#if DEBUG
+                    Plugin.Log?.LogInfo($"Skipping frame, not on whitelist {InAssembly.GetName().Name}");
+#endif
+                }
+
+            }
+
+            return dumpedAnyFrames;
+        }
 
         //Process the exception here
         StringBuilder sb = new("\n\n--- Exception Handler ---\n\n");
@@ -58,111 +173,35 @@ public static class UDAExceptionHandler
         sb.Append("Exception Caught: ");
         sb.AppendLine(ex.GetType().ToString());
 
-        var target = ex.TargetSite;
+        sb.Append("Message: ");
+        sb.AppendLine(ex.Message);
 
-        if (target is null)
+        if (PatchStorage.InfoCache.TryGetValue(ex.TargetSite.DeclaringType.Assembly, out PluginInfo info))
         {
-#if DEBUG
-            Plugin.Log?.LogInfo("targets null");
-#endif
-            return;
+            WritePluginInfo(sb, info, 1);
         }
 
-        sb.Append("Target: ");
-        sb.Append(target.DeclaringType.Name);
-        sb.Append('.');
-        sb.AppendLine(target.Name);
+        sb.AppendLine();
 
-        var declaringAssembly = target.DeclaringType.Assembly;
+        sb.Append(Tabs(1));
+        sb.AppendLine("--- Begin Frames ---");
+        sb.AppendLine();
 
-        static bool ShouldUseWhitelist()
+        foreach (var item in trace.GetFrames())
         {
-            if (Plugin.EnableWhitelisting is not null && Plugin.EnableWhitelisting.Value)
-                return true;
-
-            return false;
-        }
-
-        //Check for whitelist config
-        if (ShouldUseWhitelist())
-            //Filter for only exceptions thrown by Assembly-Csharp or Plugins
-            if (!(AssemblyWhiteList.Contains(declaringAssembly) || PatchStorage.InfoCache.ContainsKey(declaringAssembly)))
+            if (DumpFrame(sb, item, 2))
             {
-#if DEBUG
-                Plugin.Log?.LogInfo($"Not on whitelist or plugin: {declaringAssembly}");
-#endif
-                return;
-            }
-
-
-        //Plugin.Log?.LogInfo("Stack trace");
-        StackTrace stackTrace = new(ex);
-
-        if (stackTrace.FrameCount > 1)
-        {
-            var caller = stackTrace.GetFrame(1).GetMethod();
-
-            sb.Append("Caller: ");
-            sb.Append(caller.DeclaringType.Name);
-            sb.Append('.');
-            sb.AppendLine(caller.Name);
-        }
-
-        sb.Append("Declaring Assembly: ");
-        sb.AppendLine(declaringAssembly.GetName().Name);
-
-        if (PatchStorage.InfoCache.TryGetValue(declaringAssembly, out PluginInfo info))
-        {
-            WritePluginInfo(sb, info, 0);
-        }
-
-        var blames = PatchStorage.GetPatchInformation(target);
-
-        var patches = Harmony.GetPatchInfo(target);
-
-        if (patches is not null)
-        {
-            if (patches.Prefixes is not null)
-                foreach (var patch in patches.Prefixes)
-                {
-                    blames.Add(patch.PatchMethod.GetType().Assembly);
-                }
-
-            if (patches.Postfixes is not null)
-                foreach (var patch in patches.Postfixes)
-                {
-                    blames.Add(patch.PatchMethod.GetType().Assembly);
-                }
-
-            if (patches.Finalizers is not null)
-                foreach (var patch in patches.Finalizers)
-                {
-                    blames.Add(patch.PatchMethod.GetType().Assembly);
-                }
-        }
-
-        if (blames.Count > 0)
-        {
-            sb.AppendLine("\nPotential Blames:\n");
-
-            foreach (var blame in blames)
-            {
-                sb.Append(Tabs(1));
-                sb.AppendLine(blame.GetName().Name);
-
-                if (PatchStorage.InfoCache.TryGetValue(blame, out PluginInfo bInfo))
-                {
-                    WritePluginInfo(sb, bInfo, 1);
-                }
+                outFrames++;
             }
         }
-        else
-        {
-            sb.AppendLine("\nNo blames!");
-        }
+
+        sb.Append(Tabs(1));
+        sb.AppendLine("--- End Frames ---");
 
         sb.AppendLine("\n--- End Exception Handler ---");
-        Plugin.Log?.LogError(sb);
+
+        if (outFrames > 0)
+            Plugin.Log?.LogError(sb);
     }
 
     static Assembly GetAssemblyByName(string name)
@@ -171,6 +210,7 @@ public static class UDAExceptionHandler
                SingleOrDefault(assembly => assembly.GetName().Name.Equals(name, StringComparison.InvariantCultureIgnoreCase));
     }
 
+    [MethodImpl(MethodImplOptions.NoInlining)]
     internal static void DebugThrow()
     {
         throw new Exception("Debug throw");
