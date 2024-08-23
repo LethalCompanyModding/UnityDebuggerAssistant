@@ -1,5 +1,9 @@
 # UnityDebuggerAssistant Changelog
 
+## v1.3.2
+
+- Applies whitelist filter setting to main assembly in a given exception
+
 ## v1.3.1
 
 - Fixes some missing methods on older games using net standard < 2.1 such as Peaks of Yore
