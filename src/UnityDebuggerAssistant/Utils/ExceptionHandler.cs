@@ -7,6 +7,7 @@ using System.Reflection;
 using HarmonyLib;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using System.IO;
 
 namespace UnityDebuggerAssistant.Utils;
 
@@ -53,7 +54,16 @@ public static class UDAExceptionHandler
         static void WritePluginInfo(StringBuilder sb, PluginInfo info, int Indent)
         {
 
-            static string GetPluginDirSandboxed(PluginInfo info) => $"plugins{info.Location.Split("plugins")[1]}";
+            static string GetPluginDirSandboxed(PluginInfo info)
+            {
+                int start = info.Location.IndexOf($"{Path.DirectorySeparatorChar}plugins{Path.DirectorySeparatorChar}");
+
+                if (start < 0)
+                    return "Unknown";
+
+                int length = info.Location.Length - start;
+                return new(info.Location.ToCharArray(), start, length);
+            }
 
             sb.AppendLine();
             sb.Append(Tabs(Indent));
@@ -96,7 +106,7 @@ public static class UDAExceptionHandler
                     sb.Append("In Assembly: ");
                     sb.AppendLine(InAssembly.GetName().Name);
 
-                    if (frame.HasSource())
+                    if (frame.GetFileName() is not null)
                     {
                         sb.Append(Tabs(Indent));
                         sb.Append("Source: ");
@@ -220,7 +230,7 @@ public static class UDAExceptionHandler
                 sb.Append(outFrames);
                 sb.AppendLine(":");
 
-                sb.Append(sbi);
+                sb.Append(sbi.ToString());
             }
 
         }
