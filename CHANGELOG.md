@@ -1,5 +1,9 @@
 # UnityDebuggerAssistant Changelog
 
+## v1.3.1
+
+- Fixes some missing methods on older games using net standard < 2.1 such as Peaks of Yore
+
 ## v1.3.0
 
 - Experimental mode has been folded into the standard handling loop
