@@ -32,8 +32,6 @@ This mod has been dedicated to the [Lethal Company Modding community repo](https
 
 - EnableWhiteList
   - Enables or disables the built in whitelist for exceptions
-- EnableExperimentalMod
-  - Toggles an aggressive but experimental filter mode. Useful for deep debugging but should probably not be used in actual gameplay
 
 ## How Does This Help Me?
 
