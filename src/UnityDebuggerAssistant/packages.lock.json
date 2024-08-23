@@ -1,7 +1,7 @@
 {
   "version": 1,
   "dependencies": {
-    ".NETStandard,Version=v2.1": {
+    ".NETStandard,Version=v2.0": {
       "BepInEx.Analyzers": {
         "type": "Direct",
         "requested": "[1.*, )",
@@ -18,15 +18,20 @@
           "HarmonyX": "2.7.0"
         }
       },
-      "LethalCompany.GameLibs.Steam": {
+      "NETStandard.Library": {
         "type": "Direct",
-        "requested": "[61.0.0-ngd.0, )",
-        "resolved": "61.0.0-ngd.0",
-        "contentHash": "Zkz70CrtBBTaHDhscDRShGOC/ykdoXR6tEv3See7LB7vzGRnkyca3fVSu5pj2cuHjk4NOvAlUFeBCvim+i88dQ==",
+        "requested": "[2.0.3, )",
+        "resolved": "2.0.3",
+        "contentHash": "st47PosZSHrjECdjeIzZQbzivYBJFv6P2nv4cj2ypdI204DO+vZ7l5raGMiX4eXMJ53RfOIg+/s4DHVZ54Nu2A==",
         "dependencies": {
-          "Newtonsoft.JSON": "13.0.3",
-          "UnityEngine.Modules": "2022.3.9"
+          "Microsoft.NETCore.Platforms": "1.1.0"
         }
+      },
+      "UnityEngine.Modules": {
+        "type": "Direct",
+        "requested": "[2021.3.27, )",
+        "resolved": "2021.3.27",
+        "contentHash": "9pXE4Br57kyxX8n4c+kkUhB2ssuVwlla+MoKGpwR3p6dH8haNUUs1HNeR/ovnKK797J5xmye+WjLOMRA/caISQ=="
       },
       "BepInEx.BaseLib": {
         "type": "Transitive",
@@ -85,11 +90,6 @@
           "System.Reflection.Emit.Lightweight": "4.7.0",
           "System.Reflection.TypeExtensions": "4.7.0"
         }
-      },
-      "Newtonsoft.Json": {
-        "type": "Transitive",
-        "resolved": "13.0.3",
-        "contentHash": "HrC5BXdl00IP9zeV+0Z848QWPAoCr9P3bDEZguI+gkLcBKAOxix/tLEAAHC+UvDNPv4a2d18lOReHMOagPa+zQ=="
       },
       "System.Collections": {
         "type": "Transitive",
@@ -248,7 +248,10 @@
       "System.Reflection.Emit": {
         "type": "Transitive",
         "resolved": "4.7.0",
-        "contentHash": "VR4kk8XLKebQ4MZuKuIni/7oh+QGFmZW3qORd1GvBq/8026OpW501SzT/oypwiQl4TvT8ErnReh/NzY9u+C6wQ=="
+        "contentHash": "VR4kk8XLKebQ4MZuKuIni/7oh+QGFmZW3qORd1GvBq/8026OpW501SzT/oypwiQl4TvT8ErnReh/NzY9u+C6wQ==",
+        "dependencies": {
+          "System.Reflection.Emit.ILGeneration": "4.7.0"
+        }
       },
       "System.Reflection.Emit.ILGeneration": {
         "type": "Transitive",
@@ -258,7 +261,10 @@
       "System.Reflection.Emit.Lightweight": {
         "type": "Transitive",
         "resolved": "4.7.0",
-        "contentHash": "a4OLB4IITxAXJeV74MDx49Oq2+PsF6Sml54XAFv+2RyWwtDBcabzoxiiJRhdhx+gaohLh4hEGCLQyBozXoQPqA=="
+        "contentHash": "a4OLB4IITxAXJeV74MDx49Oq2+PsF6Sml54XAFv+2RyWwtDBcabzoxiiJRhdhx+gaohLh4hEGCLQyBozXoQPqA==",
+        "dependencies": {
+          "System.Reflection.Emit.ILGeneration": "4.7.0"
+        }
       },
       "System.Reflection.Extensions": {
         "type": "Transitive",
@@ -368,11 +374,6 @@
           "Microsoft.NETCore.Targets": "1.1.0",
           "System.Runtime": "4.3.0"
         }
-      },
-      "UnityEngine.Modules": {
-        "type": "Transitive",
-        "resolved": "2022.3.9",
-        "contentHash": "sSxqZjd05U0NWlX+eappdlsEuXFvDRHkUaClDVTocGRzCmIwNvgGJIPh22lGklIpNZ3cJZneYJkIUnEIazR8VA=="
       }
     }
   }

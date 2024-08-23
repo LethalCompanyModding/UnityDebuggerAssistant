@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.1</TargetFramework>
+    <TargetFramework>netstandard2.0</TargetFramework>
 
     <!-- 
       These were automatically generated for you by the template.
@@ -36,19 +36,12 @@
   -->
 
   <ItemGroup>
-    <PackageReference
-      Include="BepInEx.Analyzers"
-      PrivateAssets="all"
-      Version="1.*"
-    />
-    <PackageReference
-      Include="BepInEx.Core"
-      Version="5.4.*"
-    />
-    <PackageReference
-      Include="LethalCompany.GameLibs.Steam"
-      Version="61.0.0-ngd.0"
-    />
+    <PackageReference Include="BepInEx.Analyzers" PrivateAssets="all" Version="1.*" />
+    <PackageReference Include="BepInEx.Core" Version="5.4.*" />
+    <PackageReference Include="UnityEngine.Modules" Version="2021.3.27">
+      <IncludeAssets>all</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
 
     <!--
       When adding additional references, ensure you use <Private>false</Private> to
