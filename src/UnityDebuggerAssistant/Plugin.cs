@@ -22,7 +22,6 @@ public class Plugin : BaseUnityPlugin
 {
   public static ManualLogSource? Log;
   internal static ConfigEntry<bool> EnableWhitelisting = null!;
-  internal static ConfigEntry<bool> EnableExperimentalMode = null!;
 
   private void Awake()
   {
