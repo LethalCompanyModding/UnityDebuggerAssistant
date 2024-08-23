@@ -1,8 +1,9 @@
 # UnityDebuggerAssistant Changelog
 
-## v1.2.2
+## v1.3.0
 
 - Experimental mode has been folded into the standard handling loop
+  - Experimental flag is now removed from the config file
 - The exception handler now processes each frame of each exception and outputs any potential blames for even better debugging
 
 ## v1.2.1
