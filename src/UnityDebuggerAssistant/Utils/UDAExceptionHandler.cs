@@ -8,6 +8,7 @@ using HarmonyLib;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.IO;
+using System.Collections.ObjectModel;
 
 namespace UnityDebuggerAssistant.Utils;
 
@@ -162,25 +163,20 @@ public static class UDAExceptionHandler
                     if (harmonyBlames is not null)
                     {
 
-                        //Potential optimization: Make this a function
+                        static void DoHarmonyBlames(StringBuilder sb, ReadOnlyCollection<Patch>? Patches, int Indent)
+                        {
+                            if (Patches is null)
+                                return;
 
-                        if (harmonyBlames.Prefixes is not null)
-                            foreach (var patch in harmonyBlames.Prefixes)
+                            foreach (var patch in Patches)
                             {
-                                DumpPatch(sb, patch.PatchMethod.DeclaringType.Assembly, Indent + 1);
+                                DumpPatch(sb, patch.PatchMethod.DeclaringType.Assembly, Indent);
                             }
+                        }
 
-                        if (harmonyBlames.Postfixes is not null)
-                            foreach (var patch in harmonyBlames.Postfixes)
-                            {
-                                DumpPatch(sb, patch.PatchMethod.DeclaringType.Assembly, Indent + 1);
-                            }
-
-                        if (harmonyBlames.Finalizers is not null)
-                            foreach (var patch in harmonyBlames.Finalizers)
-                            {
-                                DumpPatch(sb, patch.PatchMethod.DeclaringType.Assembly, Indent + 1);
-                            }
+                        DoHarmonyBlames(sb, harmonyBlames.Prefixes, Indent + 1);
+                        DoHarmonyBlames(sb, harmonyBlames.Postfixes, Indent + 1);
+                        DoHarmonyBlames(sb, harmonyBlames.Finalizers, Indent + 1);
                     }
                 }
                 else
