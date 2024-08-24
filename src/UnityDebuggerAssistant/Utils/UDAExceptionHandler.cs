@@ -122,7 +122,7 @@ public static class UDAExceptionHandler
                         sb.Append(Tabs(Indent));
                         sb.AppendLine(assembly.GetName().Name);
 
-                        if (UDAPatchStorage.InfoCache.TryGetValue(assembly, out PluginInfo bInfo))
+                        if (UDAPluginMarshal.InfoCache.TryGetValue(assembly, out PluginInfo bInfo))
                         {
                             WritePluginInfo(sb, bInfo, Indent);
                         }
@@ -182,7 +182,7 @@ public static class UDAExceptionHandler
         sb.Append("Assembly: ");
         sb.AppendLine(assembly.GetName().Name);
 
-        if (UDAPatchStorage.InfoCache.TryGetValue(assembly, out PluginInfo info))
+        if (UDAPluginMarshal.InfoCache.TryGetValue(assembly, out PluginInfo info))
         {
             WritePluginInfo(sb, info, 1);
         }
