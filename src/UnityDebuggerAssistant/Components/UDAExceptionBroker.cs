@@ -27,7 +27,7 @@ public class UDAExceptionBroker : MonoBehaviour
 
             for (int i = 0; i < popAmount; i++)
             {
-                UDAExceptionHandler.Handle(popped[i]);
+                UDAExceptionProcessor.Run(popped[i]);
             }
 
         }
