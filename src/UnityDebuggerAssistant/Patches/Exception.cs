@@ -10,8 +10,6 @@ namespace UnityDebuggerAssistant.Patches;
 public static class ExceptionConstructorPatch
 {
 
-    internal static readonly ConcurrentStack<Exception> Storage = [];
-
     static IEnumerable<MethodBase> TargetMethods()
     {
         return typeof(Exception).GetConstructors(BindingFlags.Public | BindingFlags.Instance);
@@ -19,11 +17,12 @@ public static class ExceptionConstructorPatch
 
     static void Postfix(Exception __instance)
     {
-        Storage.Push(__instance);
+        ExceptionProcessor.Storage.Push(__instance);
     }
 }
 internal static class ExceptionProcessor
 {
+    internal static readonly ConcurrentStack<Exception> Storage = [];
     static bool OperationUnderway = false;
     static Exception LastInEx = null!;
 
