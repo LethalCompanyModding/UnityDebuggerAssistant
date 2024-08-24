@@ -16,29 +16,29 @@ public static class UDAExceptionHandler
 {
     public static void Handle(Exception ex)
     {
-
-        var targets = ex.TargetSite;
-        int outFrames = 0;
-
+        /*
         if (targets is null)
         {
 #if DEBUG
             UDAPlugin.Log?.LogInfo($"Skipping {ex.GetType()}");
 #endif
             return;
-        }
+        }*/
 
+        int outFrames = 0;
+        var targets = ex.TargetSite;
         var trace = new StackTrace(ex, true);
-        var assembly = targets.DeclaringType.Assembly;
+        var assembly = targets?.DeclaringType.Assembly;
 
         //Filter the main assembly
-        if (!UDAWhitelist.IsOnExceptionWhitelist(assembly) || UDABlacklist.IsOnExceptionBlacklist(assembly))
-        {
+        if (assembly is not null)
+            if (!UDAWhitelist.IsOnExceptionWhitelist(assembly) || UDABlacklist.IsOnExceptionBlacklist(assembly))
+            {
 #if DEBUG
-            UDAPlugin.Log?.LogInfo($"Skipping {assembly.GetName().Name}, failed filter");
+                UDAPlugin.Log?.LogInfo($"Skipping {assembly.GetName().Name}, failed filter");
 #endif
-            return;
-        }
+                return;
+            }
 
         static string Tabs(int n)
         {
@@ -181,14 +181,21 @@ public static class UDAExceptionHandler
         sb.AppendLine(ex.GetType().ToString());
 
         sb.Append("Assembly: ");
-        sb.AppendLine(assembly.GetName().Name);
-
-        if (UDAPluginMarshal.InfoCache.TryGetValue(assembly, out PluginInfo info))
+        if (assembly is not null)
         {
-            WritePluginInfo(sb, info, 1);
+            sb.AppendLine(assembly.GetName().Name);
+        }
+        else
+        {
+            sb.AppendLine("Unknown");
+
         }
 
-
+        if (assembly is not null)
+            if (UDAPluginMarshal.InfoCache.TryGetValue(assembly, out PluginInfo info))
+            {
+                WritePluginInfo(sb, info, 1);
+            }
 
         sb.Append("Message: ");
         sb.AppendLine(ex.Message);
