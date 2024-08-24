@@ -31,10 +31,10 @@ public static class UDAExceptionHandler
         var assembly = targets.DeclaringType.Assembly;
 
         //Filter the main assembly
-        if (!UDAWhitelist.ExceptionWhitelist(assembly))
+        if (!UDAWhitelist.IsOnExceptionWhitelist(assembly) || UDABlacklist.IsOnExceptionBlacklist(assembly))
         {
 #if DEBUG
-            UDAPlugin.Log?.LogInfo($"Skipping {assembly.GetName().Name}, not on whitelist");
+            UDAPlugin.Log?.LogInfo($"Skipping {assembly.GetName().Name}, failed filter");
 #endif
             return;
         }
@@ -88,10 +88,10 @@ public static class UDAExceptionHandler
             {
                 var InAssembly = method.DeclaringType.Assembly;
 
-                if (!UDAWhitelist.FrameWhitelist(InAssembly))
+                //Only dump frames that are both on the white list and not on the blacklist
+                if (UDAWhitelist.IsOnFrameWhitelist(InAssembly) && !UDABlacklist.IsOnFrameBlacklist(InAssembly))
                 {
                     //Dump the information about this frame's method
-                    //and the user wants to see this frame so dump it
 
                     dumpedAnyFrames = true;
 
@@ -164,7 +164,7 @@ public static class UDAExceptionHandler
                 else
                 {
 #if DEBUG
-                    UDAPlugin.Log?.LogInfo($"Skipping frame, not on whitelist {InAssembly.GetName().Name}");
+                    UDAPlugin.Log?.LogInfo($"Skipping frame {InAssembly.GetName().Name}, failed filter");
 #endif
                 }
 
