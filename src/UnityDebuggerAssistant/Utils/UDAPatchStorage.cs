@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using System.Reflection;
-using BepInEx;
 using HarmonyLib;
 
 namespace UnityDebuggerAssistant.Utils;

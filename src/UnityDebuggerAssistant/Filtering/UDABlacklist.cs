@@ -1,6 +1,4 @@
 using System.Reflection;
-using System.Collections.Generic;
-using UnityDebuggerAssistant.Utils;
 
 namespace UnityDebuggerAssistant.Filtering;
 
