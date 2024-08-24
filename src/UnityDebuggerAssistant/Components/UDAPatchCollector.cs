@@ -1,4 +1,4 @@
-using System.Collections;
+using System;
 using UnityDebuggerAssistant.Patches;
 using UnityDebuggerAssistant.Utils;
 using UnityEngine;
@@ -13,33 +13,23 @@ public class UDAPatchCollector : MonoBehaviour
         BepinExPluginMarshal.Run();
 
         Plugin.Log?.LogInfo("UDA starting patch processor cycle");
-        StartCoroutine(CheckPatches());
 
 #if DEBUG
         UDAExceptionHandler.DebugThrow();
 #endif
     }
 
-    internal IEnumerator CheckPatches()
+    private void Update()
     {
-        yield return new WaitForEndOfFrame();
+        var storage = ExceptionConstructorPatch.Storage;
 
-        if (ExceptionConstructorPatch.Storage.Count > 0)
+        if (storage.TryPop(out Exception result))
         {
-
 #if DEBUG
-            Plugin.Log?.LogInfo($"No. to process {ExceptionConstructorPatch.Storage.Count}");
-#endif
-
-            foreach (var item in ExceptionConstructorPatch.Storage)
-            {
-                UDAExceptionHandler.Handle(item);
-            }
-
-            ExceptionConstructorPatch.Storage.Clear();
+            Plugin.Log?.LogInfo("Popping from stack this frame");
+#endif 
+            ExceptionProcessor.Run(result);
         }
 
-        StartCoroutine(CheckPatches());
-        yield break;
     }
 }
