@@ -1,4 +1,4 @@
-﻿using BepInEx;
+using BepInEx;
 using BepInEx.Configuration;
 using BepInEx.Logging;
 using HarmonyLib;
@@ -62,10 +62,9 @@ public class UDAPlugin : BaseUnityPlugin
 
     harmony.PatchAll(typeof(ExceptionConstructorPatch));
 
-    Log.LogInfo("Deferring plugin collection..");
-
-    var go = new GameObject("UDA Exception Broker", [
-      typeof(UDAExceptionBroker)
+    var go = new GameObject("UDAMain", [
+      typeof(UDAExceptionBroker),
+      typeof(UDAPostChainloadRunner)
     ])
     {
       hideFlags = HideFlags.HideAndDontSave
