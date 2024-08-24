@@ -162,22 +162,24 @@ public static class UDAExceptionHandler
                     if (harmonyBlames is not null)
                     {
 
+                        //Potential optimization: Make this a function
+
                         if (harmonyBlames.Prefixes is not null)
                             foreach (var patch in harmonyBlames.Prefixes)
                             {
-                                DumpPatch(sb, patch.PatchMethod.GetType().Assembly, Indent + 1);
+                                DumpPatch(sb, patch.PatchMethod.DeclaringType.Assembly, Indent + 1);
                             }
 
                         if (harmonyBlames.Postfixes is not null)
                             foreach (var patch in harmonyBlames.Postfixes)
                             {
-                                DumpPatch(sb, patch.PatchMethod.GetType().Assembly, Indent + 1);
+                                DumpPatch(sb, patch.PatchMethod.DeclaringType.Assembly, Indent + 1);
                             }
 
                         if (harmonyBlames.Finalizers is not null)
                             foreach (var patch in harmonyBlames.Finalizers)
                             {
-                                DumpPatch(sb, patch.PatchMethod.GetType().Assembly, Indent + 1);
+                                DumpPatch(sb, patch.PatchMethod.DeclaringType.Assembly, Indent + 1);
                             }
                     }
                 }
