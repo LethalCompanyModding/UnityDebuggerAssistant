@@ -8,18 +8,11 @@ namespace UnityDebuggerAssistant.Components;
 public class UDAExceptionBroker : MonoBehaviour
 {
 
-    private Exception[] popped = new Exception[3];
+    private readonly Exception[] popped = new Exception[3];
 
-    private void Start()
+    private void Awake()
     {
-        UDAPlugin.Log?.LogInfo("UDA post-Chainloader startup");
-        UDAPluginMarshal.Run();
-
-        UDAPlugin.Log?.LogInfo("UDA starting patch processor cycle");
-
-#if DEBUG
-        UDAExceptionHandler.DebugThrow();
-#endif
+        UDAPlugin.Log?.LogInfo("UDAExceptionBroker active");
     }
 
     private void Update()
