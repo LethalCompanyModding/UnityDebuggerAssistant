@@ -8,7 +8,6 @@ namespace UnityDebuggerAssistant.Utils;
 internal static class UDAPatchStorage
 {
     private static readonly Dictionary<MethodBase, List<Assembly>> Patches = [];
-    internal static readonly Dictionary<Assembly, PluginInfo> InfoCache = [];
     private static readonly Assembly HarmonyAssembly = typeof(Harmony).Assembly;
 
     internal static bool AddPatchInformation(MethodBase method, Assembly assembly)
@@ -34,16 +33,5 @@ internal static class UDAPatchStorage
             return [];
 
         return inList;
-    }
-
-    internal static bool AddToInfoCache(Assembly assembly, PluginInfo info)
-    {
-        //waah
-        if (InfoCache.ContainsKey(assembly))
-            return false;
-
-        InfoCache.Add(assembly, info);
-
-        return true;
     }
 }

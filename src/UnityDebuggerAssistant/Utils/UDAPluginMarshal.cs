@@ -1,9 +1,13 @@
+using System.Reflection;
 using System.Diagnostics;
+using System.Collections.Generic;
+using BepInEx;
 
 namespace UnityDebuggerAssistant.Utils;
 
 public static class UDAPluginMarshal
 {
+    internal static readonly Dictionary<Assembly, PluginInfo> InfoCache = [];
     public static void Run()
     {
         Stopwatch timer = new();
@@ -31,11 +35,22 @@ public static class UDAPluginMarshal
 
             //Add to relational database Assembly => Info
             if (info is not null)
-                UDAPatchStorage.AddToInfoCache(assembly, info);
+                AddToInfoCache(assembly, info);
         }
 
         //Announce time taken
         timer.Stop();
         UDAPlugin.Log?.LogInfo($"BepinEx Plugins Marshaled in {timer.ElapsedMilliseconds}ms");
+    }
+
+    internal static bool AddToInfoCache(Assembly assembly, PluginInfo info)
+    {
+        //waah
+        if (InfoCache.ContainsKey(assembly))
+            return false;
+
+        InfoCache.Add(assembly, info);
+
+        return true;
     }
 }
