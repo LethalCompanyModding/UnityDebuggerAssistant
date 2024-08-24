@@ -18,7 +18,7 @@ using UnityEngine;
 */
 
 [BepInPlugin(LCMPluginInfo.PLUGIN_GUID, LCMPluginInfo.PLUGIN_NAME, LCMPluginInfo.PLUGIN_VERSION)]
-public class Plugin : BaseUnityPlugin
+public class UDAPlugin : BaseUnityPlugin
 {
   public static ManualLogSource? Log;
   internal static ConfigEntry<bool> EnableWhitelisting = null!;
@@ -41,7 +41,7 @@ public class Plugin : BaseUnityPlugin
     Log.LogInfo($"Using whitelist: {EnableWhitelisting.Value}");
 
     // Add listeners
-    ILHook.OnDetour += MonoModPatchListener.ListenForPatch;
+    ILHook.OnDetour += UDAPatchListener.ListenForPatch;
 
     Harmony harmony = new(LCMPluginInfo.PLUGIN_GUID);
 
@@ -50,7 +50,7 @@ public class Plugin : BaseUnityPlugin
     Log.LogInfo("Deferring plugin collection..");
 
     var go = new GameObject("UDA Patch Collector", [
-      typeof(UDAPatchCollector)
+      typeof(UDAExceptionStacker)
     ])
     {
       hideFlags = HideFlags.HideAndDontSave

@@ -2,7 +2,7 @@ using System.Diagnostics;
 
 namespace UnityDebuggerAssistant.Utils;
 
-public static class BepinExPluginMarshal
+public static class UDAPluginMarshal
 {
     public static void Run()
     {
@@ -25,17 +25,17 @@ public static class BepinExPluginMarshal
             if (blames < 3)
             {
                 blames++;
-                PatchStorage.AddPatchInformation(typeof(UDAExceptionHandler).GetMethod(nameof(UDAExceptionHandler.DebugThrow)), assembly);
+                UDAPatchStorage.AddPatchInformation(typeof(UDAExceptionHandler).GetMethod(nameof(UDAExceptionHandler.DebugThrow)), assembly);
             }
 #endif
 
             //Add to relational database Assembly => Info
             if (info is not null)
-                PatchStorage.AddToInfoCache(assembly, info);
+                UDAPatchStorage.AddToInfoCache(assembly, info);
         }
 
         //Announce time taken
         timer.Stop();
-        Plugin.Log?.LogInfo($"BepinEx Plugins Marshaled in {timer.ElapsedMilliseconds}ms");
+        UDAPlugin.Log?.LogInfo($"BepinEx Plugins Marshaled in {timer.ElapsedMilliseconds}ms");
     }
 }

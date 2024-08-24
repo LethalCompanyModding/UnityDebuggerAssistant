@@ -31,14 +31,14 @@ internal static class ExceptionProcessor
     {
         if (OperationUnderway)
         {
-            Plugin.Log?.LogWarning("Exception processor is busy");
+            UDAPlugin.Log?.LogWarning("Exception processor is busy");
             return;
         }
 
         if (LastInEx == __instance)
         {
 #if DEBUG
-            Plugin.Log?.LogInfo("Seen this one before");
+            UDAPlugin.Log?.LogInfo("Seen this one before");
 #endif
             return;
         }
@@ -51,14 +51,14 @@ internal static class ExceptionProcessor
         {
 
 #if DEBUG
-            Plugin.Log?.LogInfo(__instance.GetType());
+            UDAPlugin.Log?.LogInfo(__instance.GetType());
 #endif
             UDAExceptionHandler.Handle(__instance);
         }
         catch (Exception e)
         {
-            Plugin.Log?.LogError("The exception handler failed while running. Please report the next line to Robyn:");
-            Plugin.Log?.LogError(e);
+            UDAPlugin.Log?.LogError("The exception handler failed while running. Please report the next line to Robyn:");
+            UDAPlugin.Log?.LogError(e);
         }
         finally
         {

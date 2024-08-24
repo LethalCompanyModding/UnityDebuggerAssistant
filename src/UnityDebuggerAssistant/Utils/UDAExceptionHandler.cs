@@ -26,7 +26,7 @@ public static class UDAExceptionHandler
         if (targets is null)
         {
 #if DEBUG
-            Plugin.Log?.LogInfo($"Skipping {ex.GetType()}");
+            UDAPlugin.Log?.LogInfo($"Skipping {ex.GetType()}");
 #endif
             return;
         }
@@ -38,7 +38,7 @@ public static class UDAExceptionHandler
         if (ShouldUseWhitelist() && !WhiteListContains(assembly))
         {
 #if DEBUG
-            Plugin.Log?.LogInfo($"Skipping {assembly.GetName().Name}, not on whitelist");
+            UDAPlugin.Log?.LogInfo($"Skipping {assembly.GetName().Name}, not on whitelist");
 #endif
             return;
         }
@@ -50,7 +50,7 @@ public static class UDAExceptionHandler
 
         static bool ShouldUseWhitelist()
         {
-            if (Plugin.EnableWhitelisting is not null && Plugin.EnableWhitelisting.Value)
+            if (UDAPlugin.EnableWhitelisting is not null && UDAPlugin.EnableWhitelisting.Value)
                 return true;
 
             return false;
@@ -58,7 +58,7 @@ public static class UDAExceptionHandler
 
         static bool WhiteListContains(Assembly assembly)
         {
-            return PatchStorage.InfoCache.ContainsKey(assembly) || AssemblyWhiteList.Contains(assembly);
+            return UDAPatchStorage.InfoCache.ContainsKey(assembly) || AssemblyWhiteList.Contains(assembly);
         }
 
         static void WritePluginInfo(StringBuilder sb, PluginInfo info, int Indent)
@@ -139,13 +139,13 @@ public static class UDAExceptionHandler
                         sb.Append(Tabs(Indent));
                         sb.AppendLine(assembly.GetName().Name);
 
-                        if (PatchStorage.InfoCache.TryGetValue(assembly, out PluginInfo bInfo))
+                        if (UDAPatchStorage.InfoCache.TryGetValue(assembly, out PluginInfo bInfo))
                         {
                             WritePluginInfo(sb, bInfo, Indent);
                         }
                     }
 
-                    var monoModBlames = PatchStorage.GetPatchInformation(method);
+                    var monoModBlames = UDAPatchStorage.GetPatchInformation(method);
                     var harmonyBlames = Harmony.GetPatchInfo(method);
 
                     if (monoModBlames.Count > 0 || harmonyBlames is not null)
@@ -186,7 +186,7 @@ public static class UDAExceptionHandler
                 else
                 {
 #if DEBUG
-                    Plugin.Log?.LogInfo($"Skipping frame, not on whitelist {InAssembly.GetName().Name}");
+                    UDAPlugin.Log?.LogInfo($"Skipping frame, not on whitelist {InAssembly.GetName().Name}");
 #endif
                 }
 
@@ -204,7 +204,7 @@ public static class UDAExceptionHandler
         sb.Append("Assembly: ");
         sb.AppendLine(assembly.GetName().Name);
 
-        if (PatchStorage.InfoCache.TryGetValue(assembly, out PluginInfo info))
+        if (UDAPatchStorage.InfoCache.TryGetValue(assembly, out PluginInfo info))
         {
             WritePluginInfo(sb, info, 1);
         }
@@ -251,7 +251,7 @@ public static class UDAExceptionHandler
         sb.AppendLine("\n--- End Exception Handler ---");
 
         if (outFrames > 0)
-            Plugin.Log?.LogError(sb);
+            UDAPlugin.Log?.LogError(sb);
     }
 
     static Assembly GetAssemblyByName(string name)

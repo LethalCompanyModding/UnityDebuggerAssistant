@@ -5,7 +5,7 @@ using HarmonyLib;
 
 namespace UnityDebuggerAssistant.Utils;
 
-internal static class PatchStorage
+internal static class UDAPatchStorage
 {
     private static readonly Dictionary<MethodBase, List<Assembly>> Patches = [];
     internal static readonly Dictionary<Assembly, PluginInfo> InfoCache = [];
@@ -24,7 +24,7 @@ internal static class PatchStorage
             return false;
 
         inList.Add(assembly);
-        Plugin.Log?.LogInfo($"blame {assembly.GetName().Name} for {method.FullDescription()}");
+        UDAPlugin.Log?.LogInfo($"blame {assembly.GetName().Name} for {method.FullDescription()}");
         return true;
     }
 

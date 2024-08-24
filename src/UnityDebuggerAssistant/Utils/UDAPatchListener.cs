@@ -4,14 +4,14 @@ using MonoMod.RuntimeDetour;
 
 namespace UnityDebuggerAssistant.Utils;
 
-public static class MonoModPatchListener
+public static class UDAPatchListener
 {
     internal static bool ListenForPatch(ILHook hook, MethodBase @base, ILContext.Manipulator manipulator)
     {
 
         if (@base is null || manipulator is null || hook is null || manipulator.Target is null)
         {
-            Plugin.Log?.LogInfo("Skipping a null/empty patch");
+            UDAPlugin.Log?.LogInfo("Skipping a null/empty patch");
             return true;
         }
 
@@ -21,7 +21,7 @@ public static class MonoModPatchListener
         Plugin.Log?.LogInfo(manipulator);
         */
 
-        PatchStorage.AddPatchInformation(@base, manipulator.Target.GetType().Assembly);
+        UDAPatchStorage.AddPatchInformation(@base, manipulator.Target.GetType().Assembly);
         return true;
     }
 }
