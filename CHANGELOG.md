@@ -4,6 +4,8 @@
 
 - Correctly determines the patching assembly for harmony patches. (No more blaming mscorlib for everything, whoops!)
 - The exception broker will now send up to 3 exceptions each frame to the handler for processing. This should result in faster responses to exceptions without a substantial increase in overhead.
+- Split whitelist into exception whitelist and frame whitelist
+- Added exception blacklist and frame blacklist
 
 ## v1.4.0
 
