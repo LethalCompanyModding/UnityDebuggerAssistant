@@ -23,6 +23,8 @@ public class UDAPatchCollector : MonoBehaviour
     {
         var storage = ExceptionConstructorPatch.Storage;
 
+        //Potential optimization: public int TryPopRange (T[] items);
+
         if (storage.TryPop(out Exception result))
         {
 #if DEBUG
