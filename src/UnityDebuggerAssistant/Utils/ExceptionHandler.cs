@@ -202,7 +202,7 @@ public static class UDAExceptionHandler
         sb.Append("Assembly: ");
         sb.AppendLine(assembly.GetName().Name);
 
-        if (PatchStorage.InfoCache.TryGetValue(ex.TargetSite.DeclaringType.Assembly, out PluginInfo info))
+        if (PatchStorage.InfoCache.TryGetValue(assembly, out PluginInfo info))
         {
             WritePluginInfo(sb, info, 1);
         }
