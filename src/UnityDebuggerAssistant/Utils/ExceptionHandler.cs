@@ -255,7 +255,7 @@ public static class UDAExceptionHandler
     static Assembly GetAssemblyByName(string name)
     {
         return AppDomain.CurrentDomain.GetAssemblies().
-               SingleOrDefault(assembly => assembly.GetName().Name.Equals(name, StringComparison.InvariantCultureIgnoreCase));
+               FirstOrDefault(assembly => assembly.GetName().Name.Equals(name, StringComparison.InvariantCultureIgnoreCase));
     }
 
     [MethodImpl(MethodImplOptions.NoInlining)]
