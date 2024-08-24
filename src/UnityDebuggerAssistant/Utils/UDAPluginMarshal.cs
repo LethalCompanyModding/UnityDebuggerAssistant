@@ -2,6 +2,7 @@ using System.Reflection;
 using System.Diagnostics;
 using System.Collections.Generic;
 using BepInEx;
+using UnityDebuggerAssistant.Processing;
 
 namespace UnityDebuggerAssistant.Utils;
 
