@@ -2,22 +2,17 @@ using System;
 using System.Text;
 using BepInEx;
 using System.Diagnostics;
-using System.Collections.Generic;
 using System.Reflection;
 using HarmonyLib;
-using System.Linq;
 using System.Runtime.CompilerServices;
 using System.IO;
 using System.Collections.ObjectModel;
+using UnityDebuggerAssistant.Filtering;
 
 namespace UnityDebuggerAssistant.Utils;
 
 public static class UDAExceptionHandler
 {
-    internal readonly static List<Assembly> AssemblyWhiteList = [
-        GetAssemblyByName("Assembly-CSharp"),
-        GetAssemblyByName("MMHOOK_Assembly-CSharp")
-    ];
     public static void Handle(Exception ex)
     {
 
@@ -36,7 +31,7 @@ public static class UDAExceptionHandler
         var assembly = targets.DeclaringType.Assembly;
 
         //Filter the main assembly
-        if (ShouldUseWhitelist() && !WhiteListContains(assembly))
+        if (!UDAWhitelist.ExceptionWhitelist(assembly))
         {
 #if DEBUG
             UDAPlugin.Log?.LogInfo($"Skipping {assembly.GetName().Name}, not on whitelist");
@@ -47,19 +42,6 @@ public static class UDAExceptionHandler
         static string Tabs(int n)
         {
             return new string(' ', n * 2);
-        }
-
-        static bool ShouldUseWhitelist()
-        {
-            if (UDAPlugin.EnableWhitelisting is not null && UDAPlugin.EnableWhitelisting.Value)
-                return true;
-
-            return false;
-        }
-
-        static bool WhiteListContains(Assembly assembly)
-        {
-            return UDAPatchStorage.InfoCache.ContainsKey(assembly) || AssemblyWhiteList.Contains(assembly);
         }
 
         static void WritePluginInfo(StringBuilder sb, PluginInfo info, int Indent)
@@ -106,7 +88,7 @@ public static class UDAExceptionHandler
             {
                 var InAssembly = method.DeclaringType.Assembly;
 
-                if (!ShouldUseWhitelist() || (ShouldUseWhitelist() && WhiteListContains(InAssembly)))
+                if (!UDAWhitelist.FrameWhitelist(InAssembly))
                 {
                     //Dump the information about this frame's method
                     //and the user wants to see this frame so dump it
