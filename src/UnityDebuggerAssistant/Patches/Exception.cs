@@ -9,11 +9,22 @@ namespace UnityDebuggerAssistant.Patches;
 
 public static class ExceptionStackGetterPatch
 {
+
+    private static bool LockRoot = false;
+
     [HarmonyPatch(typeof(Exception), nameof(Exception.StackTrace), MethodType.Getter)]
     [HarmonyPostfix]
     internal static void ExceptionStackGot(Exception __instance)
     {
-        UDAExceptionProcessor.PushException(__instance);
+        if (LockRoot)
+            return;
+
+        LockRoot = true;
+
+        //Skip the line
+        UDAExceptionProcessor.Run(__instance);
+
+        LockRoot = false;
     }
 }
 
