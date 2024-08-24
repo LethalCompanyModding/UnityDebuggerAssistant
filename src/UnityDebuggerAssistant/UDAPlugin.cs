@@ -34,6 +34,21 @@ public class UDAPlugin : BaseUnityPlugin
     */
     Log = Logger;
 
+    /************************************************************
+      Output big warning message here to help people understand
+      the actual use of this plugin
+    ************************************************************/
+
+    Log.LogMessage("""
+
+                  >------------------------------------------------------------------------<
+                    Unity Debugger assistant is loaded and receiving exceptions!
+
+                    Note: That UDA will catch ALL exceptions, even harmless ones
+                    Please ONLY report logs to modders if you have an issue with their mod
+                  >------------------------------------------------------------------------<
+                  """);
+
     EnableWhitelisting = Config.Bind(new("ExceptionHandler", "EnableWhiteList"), true, new("By default the whitelist ensures we only check exceptions inside Assembly-Csharp, plugins and common game assemblies.\nDisable this to catch everything. Will somewhat effect performance."));
 
     // Log our awake here so we can see it in LogOutput.txt file
@@ -49,8 +64,8 @@ public class UDAPlugin : BaseUnityPlugin
 
     Log.LogInfo("Deferring plugin collection..");
 
-    var go = new GameObject("UDA Patch Collector", [
-      typeof(UDAExceptionStacker)
+    var go = new GameObject("UDA Exception Broker", [
+      typeof(UDAExceptionBroker)
     ])
     {
       hideFlags = HideFlags.HideAndDontSave
