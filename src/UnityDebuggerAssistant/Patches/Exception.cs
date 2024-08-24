@@ -5,6 +5,18 @@ using HarmonyLib;
 using UnityDebuggerAssistant.Processing;
 
 namespace UnityDebuggerAssistant.Patches;
+
+
+public static class ExceptionStackGetterPatch
+{
+    [HarmonyPatch(typeof(Exception), nameof(Exception.StackTrace), MethodType.Getter)]
+    [HarmonyPostfix]
+    internal static void ExceptionStackGot(Exception __instance)
+    {
+        UDAExceptionProcessor.PushException(__instance);
+    }
+}
+
 [HarmonyPatch]
 public static class ExceptionConstructorPatch
 {
