@@ -1,5 +1,10 @@
 # UnityDebuggerAssistant Changelog
 
+## v1.4.0
+
+- Fixes a potential exception that could occur in ExceptionHandler with `SingleOrDefault` by replacing it with `FirstOrDefault`. Thanks: @p1xel8ted on github.
+- Switches from non thread safe list to ConcurrentStack to fix potential sync issues in UDAPatchCollector. Thanks: NutDaddy on Discord.
+
 ## v1.3.2
 
 - Applies whitelist filter setting to main assembly in a given exception
