@@ -250,12 +250,6 @@ public static class UDAExceptionHandler
             UDAPlugin.Log?.LogError(sb);
     }
 
-    static Assembly GetAssemblyByName(string name)
-    {
-        return AppDomain.CurrentDomain.GetAssemblies().
-               FirstOrDefault(assembly => assembly.GetName().Name.Equals(name, StringComparison.InvariantCultureIgnoreCase));
-    }
-
     [MethodImpl(MethodImplOptions.NoInlining)]
 #if DEBUG
     public static void DebugThrow()
