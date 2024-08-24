@@ -64,7 +64,9 @@ public class UDAPlugin : BaseUnityPlugin
 
     Harmony harmony = new(LCMPluginInfo.PLUGIN_GUID);
 
+    harmony.PatchAll(typeof(DebugPatches));
     harmony.PatchAll(typeof(ExceptionConstructorPatch));
+    //harmony.PatchAll(typeof(ExceptionStackGetterPatch));
 
     var go = new GameObject("UDAMain", [
       typeof(UDAExceptionBroker),

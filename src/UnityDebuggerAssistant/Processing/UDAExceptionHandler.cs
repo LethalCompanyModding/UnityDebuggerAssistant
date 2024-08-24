@@ -8,8 +8,9 @@ using System.Runtime.CompilerServices;
 using System.IO;
 using System.Collections.ObjectModel;
 using UnityDebuggerAssistant.Filtering;
+using UnityDebuggerAssistant.Utils;
 
-namespace UnityDebuggerAssistant.Utils;
+namespace UnityDebuggerAssistant.Processing;
 
 public static class UDAExceptionHandler
 {

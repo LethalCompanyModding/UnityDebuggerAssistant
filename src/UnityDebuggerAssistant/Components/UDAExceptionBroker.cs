@@ -1,6 +1,5 @@
 using System;
-using UnityDebuggerAssistant.Patches;
-using UnityDebuggerAssistant.Utils;
+using UnityDebuggerAssistant.Processing;
 using UnityEngine;
 
 namespace UnityDebuggerAssistant.Components;
@@ -17,7 +16,7 @@ public class UDAExceptionBroker : MonoBehaviour
 
     private void Update()
     {
-        var storage = ExceptionProcessor.Storage;
+        var storage = UDAExceptionProcessor.Storage;
         var popAmount = storage.TryPopRange(popped);
 
         if (popAmount > 0)
