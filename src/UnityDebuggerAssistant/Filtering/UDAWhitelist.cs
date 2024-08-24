@@ -11,8 +11,8 @@ internal static class UDAWhitelist
         Helpers.GetAssemblyByName("MMHOOK_Assembly-CSharp")
     ];
 
-    internal static bool ExceptionWhitelist(Assembly assembly) => Whitelist(UDAPlugin.UDASettings.EnableWhitelistPerException.Value, assembly);
-    internal static bool FrameWhitelist(Assembly assembly) => Whitelist(UDAPlugin.UDASettings.EnableWhitelistPerFrame.Value, assembly);
+    internal static bool IsOnExceptionWhitelist(Assembly assembly) => Whitelist(UDAPlugin.UDASettings.EnableWhitelistPerException.Value, assembly);
+    internal static bool IsOnFrameWhitelist(Assembly assembly) => Whitelist(UDAPlugin.UDASettings.EnableWhitelistPerFrame.Value, assembly);
     private static bool Whitelist(bool Setting, Assembly assembly)
     {
         //If its a plugin, its always a valid target
