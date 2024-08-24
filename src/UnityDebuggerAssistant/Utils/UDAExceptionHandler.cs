@@ -101,9 +101,9 @@ public static class UDAExceptionHandler
             bool dumpedAnyFrames = false;
 
             //We have a method
-            if (frame.GetMethod() is not null)
+            if (method is not null)
             {
-                var InAssembly = frame.GetMethod().DeclaringType.Assembly;
+                var InAssembly = method.DeclaringType.Assembly;
 
                 if (!ShouldUseWhitelist() || (ShouldUseWhitelist() && WhiteListContains(InAssembly)))
                 {
