@@ -1,5 +1,4 @@
 ﻿using BepInEx;
-using BepInEx.Configuration;
 using BepInEx.Logging;
 using HarmonyLib;
 using MonoMod.RuntimeDetour;
@@ -20,8 +19,8 @@ using UnityEngine;
 [BepInPlugin(LCMPluginInfo.PLUGIN_GUID, LCMPluginInfo.PLUGIN_NAME, LCMPluginInfo.PLUGIN_VERSION)]
 public class UDAPlugin : BaseUnityPlugin
 {
-  public static ManualLogSource? Log;
-  internal static ConfigEntry<bool> EnableWhitelisting = null!;
+  internal static ManualLogSource? Log;
+  internal static PluginConfiguration UDASettings = null!;
 
   private void Awake()
   {
@@ -33,6 +32,7 @@ public class UDAPlugin : BaseUnityPlugin
       We assign it here
     */
     Log = Logger;
+    UDASettings = new(Config);
 
     /************************************************************
       Output big warning message here to help people understand
@@ -49,10 +49,11 @@ public class UDAPlugin : BaseUnityPlugin
                   >------------------------------------------------------------------------<
                   """);
 
-    EnableWhitelisting = Config.Bind(new("ExceptionHandler", "EnableWhiteList"), true, new("By default the whitelist ensures we only check exceptions inside Assembly-Csharp, plugins and common game assemblies.\nDisable this to catch everything. Will somewhat effect performance."));
-
     //Log configuration here
-    Log.LogInfo($"Using whitelist: {EnableWhitelisting.Value}");
+    Log.LogInfo($"Using per/e whitelist: {UDASettings.EnableWhitelistPerException.Value}");
+    Log.LogInfo($"Using per/f whitelist: {UDASettings.EnableWhitelistPerFrame.Value}");
+    Log.LogInfo($"Using per/e blacklist: {UDASettings.EnableBlacklistPerException.Value}");
+    Log.LogInfo($"Using per/f blacklist: {UDASettings.EnableBlacklistPerFrame.Value}");
 
     // Add listeners
     ILHook.OnDetour += UDAPatchListener.ListenForPatch;
