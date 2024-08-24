@@ -1,4 +1,4 @@
-using BepInEx;
+﻿using BepInEx;
 using BepInEx.Configuration;
 using BepInEx.Logging;
 using HarmonyLib;
@@ -51,8 +51,7 @@ public class UDAPlugin : BaseUnityPlugin
 
     EnableWhitelisting = Config.Bind(new("ExceptionHandler", "EnableWhiteList"), true, new("By default the whitelist ensures we only check exceptions inside Assembly-Csharp, plugins and common game assemblies.\nDisable this to catch everything. Will somewhat effect performance."));
 
-    // Log our awake here so we can see it in LogOutput.txt file
-    Log.LogInfo($"Plugin {LCMPluginInfo.PLUGIN_NAME} is loaded!");
+    //Log configuration here
     Log.LogInfo($"Using whitelist: {EnableWhitelisting.Value}");
 
     // Add listeners
