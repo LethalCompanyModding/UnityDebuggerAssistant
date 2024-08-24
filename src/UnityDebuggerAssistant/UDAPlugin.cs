@@ -3,6 +3,7 @@ using BepInEx.Logging;
 using HarmonyLib;
 using MonoMod.RuntimeDetour;
 using UnityDebuggerAssistant.Components;
+using UnityDebuggerAssistant.Filtering;
 using UnityDebuggerAssistant.Patches;
 using UnityDebuggerAssistant.Utils;
 using UnityEngine;
@@ -33,6 +34,9 @@ public class UDAPlugin : BaseUnityPlugin
     */
     Log = Logger;
     UDASettings = new(Config);
+
+    //Setup filters
+    UDABlacklist.UpdateLists_Internal();
 
     /************************************************************
       Output big warning message here to help people understand
