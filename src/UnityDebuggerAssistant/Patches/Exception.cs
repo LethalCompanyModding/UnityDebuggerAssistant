@@ -3,13 +3,14 @@ using System.Reflection;
 using System.Collections.Generic;
 using HarmonyLib;
 using UnityDebuggerAssistant.Utils;
+using System.Collections.Concurrent;
 
 namespace UnityDebuggerAssistant.Patches;
 [HarmonyPatch]
 public static class ExceptionConstructorPatch
 {
 
-    internal static readonly List<Exception> Storage = [];
+    internal static readonly ConcurrentStack<Exception> Storage = [];
 
     static IEnumerable<MethodBase> TargetMethods()
     {
@@ -18,10 +19,7 @@ public static class ExceptionConstructorPatch
 
     static void Postfix(Exception __instance)
     {
-        if (Storage.Contains(__instance))
-            return;
-
-        Storage.Add(__instance);
+        Storage.Push(__instance);
     }
 }
 internal static class ExceptionProcessor
