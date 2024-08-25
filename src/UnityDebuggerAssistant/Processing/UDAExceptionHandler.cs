@@ -16,15 +16,6 @@ public static class UDAExceptionHandler
 {
     public static void Handle(Exception ex)
     {
-        /*
-        if (targets is null)
-        {
-#if DEBUG
-            UDAPlugin.Log?.LogInfo($"Skipping {ex.GetType()}");
-#endif
-            return;
-        }*/
-
         int outFrames = 0;
         var targets = ex.TargetSite;
         var trace = new StackTrace(ex, true);
