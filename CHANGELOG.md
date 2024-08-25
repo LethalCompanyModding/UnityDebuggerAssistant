@@ -1,5 +1,9 @@
 # UnityDebuggerAssistant Changelog
 
+## v1.4.2
+
+- UDA will now guess what the declaring assembly is based on context clues if the exception is missing the required information to obtain it normally. This will be noted in the output with `(Guess)`. This feature is good for when small methods get inlined and _merged_ with their calling methods or when dynamic methods clobber the stacktrace
+
 ## v1.4.1
 
 - Correctly determines the patching assembly for harmony patches. (No more blaming mscorlib for everything, whoops!)
@@ -9,8 +13,8 @@
 
 ## v1.4.0
 
-- Fixes a potential exception that could occur in ExceptionHandler with `SingleOrDefault` by replacing it with `FirstOrDefault`. Thanks: @p1xel8ted on github.
-- Switches from non thread safe list to ConcurrentStack to fix potential sync issues in UDAPatchCollector. Thanks: NutDaddy on Discord.
+- Fixes a potential exception that could occur in ExceptionHandler with `SingleOrDefault` by replacing it with `FirstOrDefault`. Thanks: @p1xel8ted on github
+- Switches from non thread safe list to ConcurrentStack to fix potential sync issues in UDAPatchCollector. Thanks: NutDaddy on Discord
 
 ## v1.3.2
 

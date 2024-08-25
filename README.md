@@ -22,7 +22,7 @@ This mod has been dedicated to the [Lethal Company Modding community repo](https
 ## Current Features
 
 - Enumerates patches from both Harmony and MonoMod/HookGenPatcher
-- Outputs a list of all plugins that modify a specific method when an Exception is thrown within that method
+- Outputs a list of all plugins that modify a specific method when an Exception with a valid trace is thrown
 - Includes useful symbols for debugging such as:
   - Calling Method for the throwing method
   - Defining Assembly Name for the throwing method
