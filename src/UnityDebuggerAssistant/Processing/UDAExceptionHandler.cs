@@ -20,16 +20,55 @@ public static class UDAExceptionHandler
         var targets = ex.TargetSite;
         var trace = new StackTrace(ex, true);
         var assembly = targets?.DeclaringType.Assembly;
+        bool guessed = false;
 
-        //Filter the main assembly
-        if (assembly is not null)
-            if (!UDAWhitelist.IsOnExceptionWhitelist(assembly) || UDABlacklist.IsOnExceptionBlacklist(assembly))
+        if (assembly is null)
+        {
+            guessed = true;
+
+            if (trace.FrameCount == 0)
             {
 #if DEBUG
-                UDAPlugin.Log?.LogInfo($"Skipping {assembly.GetName().Name}, failed filter");
+                UDAPlugin.Log?.LogInfo($"Skipping {ex.GetType()}, trace has no frames");
+                return;
 #endif
+            }
+
+            foreach (var item in trace.GetFrames())
+            {
+                if (item.HasMethod())
+                {
+                    assembly = item.GetMethod().DeclaringType.Assembly;
+                    break;
+                }
+            }
+
+            if (assembly is null)
+            {
+#if DEBUG
+                UDAPlugin.Log?.LogInfo($"Skipping {ex.GetType()}, unable to obtain assembly info");
+#endif
+
                 return;
             }
+#if DEBUG
+            else
+            {
+
+                UDAPlugin.Log?.LogInfo($"Guessing {ex.GetType()}'s assembly");
+
+            }
+#endif
+        }
+
+        //Filter the main assembly
+        if (!UDAWhitelist.IsOnExceptionWhitelist(assembly) || UDABlacklist.IsOnExceptionBlacklist(assembly))
+        {
+#if DEBUG
+            UDAPlugin.Log?.LogInfo($"Skipping {assembly.GetName().Name}, failed filter");
+#endif
+            return;
+        }
 
         static string Tabs(int n)
         {
@@ -172,21 +211,19 @@ public static class UDAExceptionHandler
         sb.AppendLine(ex.GetType().ToString());
 
         sb.Append("Assembly: ");
-        if (assembly is not null)
-        {
-            sb.AppendLine(assembly.GetName().Name);
-        }
-        else
-        {
-            sb.AppendLine("Unknown");
+        sb.Append(assembly.GetName().Name);
 
+        if (guessed)
+        {
+            sb.Append(" (Guess)");
         }
 
-        if (assembly is not null)
-            if (UDAPluginMarshal.InfoCache.TryGetValue(assembly, out PluginInfo info))
-            {
-                WritePluginInfo(sb, info, 1);
-            }
+        sb.AppendLine();
+
+        if (UDAPluginMarshal.InfoCache.TryGetValue(assembly, out PluginInfo info))
+        {
+            WritePluginInfo(sb, info, 1);
+        }
 
         sb.Append("Message: ");
         sb.AppendLine(ex.Message);
