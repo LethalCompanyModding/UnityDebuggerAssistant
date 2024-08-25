@@ -1,3 +1,4 @@
+#if DEBUG
 using HarmonyLib;
 using UnityDebuggerAssistant.Processing;
 
@@ -12,3 +13,4 @@ public class DebugPatches
         UDAPlugin.Log?.LogInfo("Debug Throw Prefix");
     }
 }
+#endif

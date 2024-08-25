@@ -1,4 +1,4 @@
-using BepInEx;
+﻿using BepInEx;
 using BepInEx.Logging;
 using HarmonyLib;
 using MonoMod.RuntimeDetour;
@@ -76,7 +76,11 @@ public class UDAPlugin : BaseUnityPlugin
 
     Harmony harmony = new(LCMPluginInfo.PLUGIN_GUID);
 
+#if DEBUG
+    //Debug patchers for testing
     harmony.PatchAll(typeof(DebugPatches));
+#endif
+
     harmony.PatchAll(typeof(ExceptionConstructorPatch));
     //harmony.PatchAll(typeof(ExceptionStackGetterPatch));
 
