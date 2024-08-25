@@ -1,7 +1,9 @@
-﻿using BepInEx;
+using BepInEx;
 using BepInEx.Logging;
 using HarmonyLib;
 using MonoMod.RuntimeDetour;
+using System.Linq;
+using System.Text;
 using UnityDebuggerAssistant.Components;
 using UnityDebuggerAssistant.Filtering;
 using UnityDebuggerAssistant.Patches;
@@ -40,24 +42,34 @@ public class UDAPlugin : BaseUnityPlugin
 
     /************************************************************
       Output big warning message here to help people understand
-      the actual use of this plugin
+      the actual use of this plugin, also log configuration
     ************************************************************/
 
-    Log.LogMessage("""
+    StringBuilder sb = new("""
+
 
                   >------------------------------------------------------------------------<
                     Unity Debugger assistant is loaded and receiving exceptions!
 
                     Note: That UDA will catch ALL exceptions, even harmless ones
                     Please ONLY report logs to modders if you have an issue with their mod
-                  >------------------------------------------------------------------------<
-                  """);
 
-    //Log configuration here
-    Log.LogInfo($"Using per/e whitelist: {UDASettings.EnableWhitelistPerException.Value}");
-    Log.LogInfo($"Using per/f whitelist: {UDASettings.EnableWhitelistPerFrame.Value}");
-    Log.LogInfo($"Using per/e blacklist: {UDASettings.EnableBlacklistPerException.Value}");
-    Log.LogInfo($"Using per/f blacklist: {UDASettings.EnableBlacklistPerFrame.Value}");
+                    Config:
+
+                  """);
+    sb.Append("    Using Per-Exception Whitelist: ");
+    sb.AppendLine(UDASettings.EnableWhitelistPerException.Value.ToString());
+    sb.Append("    Using Per-Exception Blacklist: ");
+    sb.AppendLine(UDASettings.EnableBlacklistPerException.Value.ToString());
+    sb.Append("    Using Per-Frame Whitelist: ");
+    sb.AppendLine(UDASettings.EnableWhitelistPerFrame.Value.ToString());
+    sb.Append("    Using Per-Frame Blacklist: ");
+    sb.AppendLine(UDASettings.EnableBlacklistPerFrame.Value.ToString());
+    sb.Append("    Total Filters: ");
+    sb.AppendLine((UDABlacklist.ExceptionBlackList.Count() + UDABlacklist.FrameBlackList.Count()).ToString());
+    sb.AppendLine(">------------------------------------------------------------------------<");
+
+    Log.LogMessage(sb);
 
     // Add listeners
     ILHook.OnDetour += UDAPatchListener.ListenForPatch;
